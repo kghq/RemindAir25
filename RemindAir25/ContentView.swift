@@ -8,14 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @Bindable var exercises = Exercises()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            // placeholder image if empty
+            List(exercises.items) { exercise in
+                
+            }
+            .navigationTitle("Exercises")
+            .toolbar {
+                ToolbarItem {
+                    Button("Add", systemImage: "plus") {
+                        
+                    }
+                }
+            }
         }
-        .padding()
     }
 }
 

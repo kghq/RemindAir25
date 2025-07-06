@@ -13,7 +13,7 @@ protocol Exercise {
 }
 
 @Observable class Exercises {
-    var items = [Exercise]()
+    var items = [BreathingExercise]()
     
     // will require init with loading funcionality
 }
