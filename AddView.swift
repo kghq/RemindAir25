@@ -116,13 +116,13 @@ struct AddView: View {
                 
                 Button("Add Exercise") {
                     //let breathPattern = BreathPattern()
-                    //let testExercise = BreathingExercise(name: "Test", breathPattern: breathPattern, cycles: 3)
+                    //let testExercise = BreathExercise(name: "Test", breathPattern: breathPattern, cycles: 3)
                     
                     let newBreathPattern = BreathPattern(inhale: inhale, exhale: exhale, holdFull: holdFull, holdEmpty: holdEmpty)
                     
-                    let newBreathingExercise = BreathingExercise(name: name, description: description, breathPattern: newBreathPattern, cycles: Int(cycles))
+                    let newBreathExercise = BreathExercise(name: name, description: description, breathPattern: newBreathPattern, cycles: Int(cycles))
                     
-                    exercises.items.append(newBreathingExercise)
+                    exercises.items.append(newBreathExercise)
                     dismiss()
                 }
             }

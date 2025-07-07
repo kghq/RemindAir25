@@ -6,17 +6,34 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		33F6480E2E1C503E00F789E2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 33F6480C2E1C503E00F789E2 /* README.md */; };
+		33F6480F2E1C503E00F789E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33F648082E1C503E00F789E2 /* Assets.xcassets */; };
+		33F648102E1C503E00F789E2 /* BreathExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F648092E1C503E00F789E2 /* BreathExercise.swift */; };
+		33F648112E1C503E00F789E2 /* BreathPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F6480A2E1C503E00F789E2 /* BreathPattern.swift */; };
+		33F648122E1C503E00F789E2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F6480B2E1C503E00F789E2 /* ContentView.swift */; };
+		33F648132E1C503E00F789E2 /* RemindAir25App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F6480D2E1C503E00F789E2 /* RemindAir25App.swift */; };
+		33F648142E1C503E00F789E2 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F648072E1C503E00F789E2 /* AddView.swift */; };
+		33F648162E1C518A00F789E2 /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 33F648152E1C518A00F789E2 /* Notes.txt */; };
+		33FCD8752E1BE67800875518 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FCD8742E1BE67800875518 /* DetailView.swift */; };
+		33FCD8772E1BEC7800875518 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FCD8762E1BEC7800875518 /* EditView.swift */; };
+		33FCD8792E1BF11B00875518 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FCD8782E1BF11B00875518 /* TimerView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		33F4359F2E1B07BF00EB77F4 /* RemindAir25.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemindAir25.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		33F648072E1C503E00F789E2 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
+		33F648082E1C503E00F789E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		33F648092E1C503E00F789E2 /* BreathExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathExercise.swift; sourceTree = "<group>"; };
+		33F6480A2E1C503E00F789E2 /* BreathPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathPattern.swift; sourceTree = "<group>"; };
+		33F6480B2E1C503E00F789E2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		33F6480C2E1C503E00F789E2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		33F6480D2E1C503E00F789E2 /* RemindAir25App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindAir25App.swift; sourceTree = "<group>"; };
+		33F648152E1C518A00F789E2 /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
+		33FCD8742E1BE67800875518 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		33FCD8762E1BEC7800875518 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
+		33FCD8782E1BF11B00875518 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		33F435A12E1B07BF00EB77F4 /* RemindAir25 */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RemindAir25;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		33F4359C2E1B07BF00EB77F4 /* Frameworks */ = {
@@ -32,7 +49,17 @@
 		33F435962E1B07BF00EB77F4 = {
 			isa = PBXGroup;
 			children = (
-				33F435A12E1B07BF00EB77F4 /* RemindAir25 */,
+				33F6480C2E1C503E00F789E2 /* README.md */,
+				33F648072E1C503E00F789E2 /* AddView.swift */,
+				33F648092E1C503E00F789E2 /* BreathExercise.swift */,
+				33F6480A2E1C503E00F789E2 /* BreathPattern.swift */,
+				33F648152E1C518A00F789E2 /* Notes.txt */,
+				33F6480B2E1C503E00F789E2 /* ContentView.swift */,
+				33FCD8742E1BE67800875518 /* DetailView.swift */,
+				33FCD8762E1BEC7800875518 /* EditView.swift */,
+				33F6480D2E1C503E00F789E2 /* RemindAir25App.swift */,
+				33FCD8782E1BF11B00875518 /* TimerView.swift */,
+				33F648082E1C503E00F789E2 /* Assets.xcassets */,
 				33F435A02E1B07BF00EB77F4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,9 +86,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				33F435A12E1B07BF00EB77F4 /* RemindAir25 */,
 			);
 			name = RemindAir25;
 			packageProductDependencies = (
@@ -109,6 +133,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33F6480E2E1C503E00F789E2 /* README.md in Resources */,
+				33F648162E1C518A00F789E2 /* Notes.txt in Resources */,
+				33F6480F2E1C503E00F789E2 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +146,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33F648102E1C503E00F789E2 /* BreathExercise.swift in Sources */,
+				33F648112E1C503E00F789E2 /* BreathPattern.swift in Sources */,
+				33F648122E1C503E00F789E2 /* ContentView.swift in Sources */,
+				33F648132E1C503E00F789E2 /* RemindAir25App.swift in Sources */,
+				33F648142E1C503E00F789E2 /* AddView.swift in Sources */,
+				33FCD8752E1BE67800875518 /* DetailView.swift in Sources */,
+				33FCD8772E1BEC7800875518 /* EditView.swift in Sources */,
+				33FCD8792E1BF11B00875518 /* TimerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
