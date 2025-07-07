@@ -21,6 +21,7 @@ protocol Exercise {
 @Observable class BreathingExercise: Exercise, Codable, Identifiable {
     var id = UUID()
     var name = ""
+    var description = ""
     
     var breathPattern: BreathPattern
     var cycles: Int
@@ -30,19 +31,21 @@ protocol Exercise {
     
     var dateCreated = Date.now
     // date created (watch out for edit so the date isn't replaced by date edited
-    //
+    var dateUsed = Date.now
     
     enum CodingKeys: String, CodingKey {
         case _id = "id"
         case _name = "name"
+        case _description = "description"
         case _breathPattern = "breathPattern"
         case _cycles = "cycles"
         case _dateCreated = "dateCreated"
     }
     
-    init(id: UUID = UUID(), name: String = "", breathPattern: BreathPattern, cycles: Int, dateCreated: Foundation.Date = Date.now) {
+    init(id: UUID = UUID(), name: String = "", description: String = "", breathPattern: BreathPattern, cycles: Int, dateCreated: Foundation.Date = Date.now) {
         self.id = id
         self.name = name
+        self.description = description
         self.breathPattern = breathPattern
         self.cycles = cycles
         self.dateCreated = dateCreated
