@@ -13,7 +13,38 @@ protocol Exercise {
 }
 
 @Observable class Exercises {
+    
+    let test1 = BreathExercise(
+        name: "Test 1",
+        description: "Test 1 description",
+        breathPattern: BreathPattern(inhale: 4, exhale: 4, holdFull: 4, holdEmpty: 4)
+    )
+    
+    let test2 = BreathExercise(
+        name: "Test 2",
+        description: "Test 2 description",
+        breathPattern: BreathPattern(inhale: 2, exhale: 8, holdFull: 3, holdEmpty: 0)
+    )
+    
+    let test3 = BreathExercise(
+        name: "Test 3",
+        description: "Test 1 description",
+        breathPattern: BreathPattern(inhale: 10, exhale: 3, holdFull: 5, holdEmpty: 3)
+    )
+    
+    let test4 = BreathExercise(
+        name: "Test 4",
+        description: "Test 2 description",
+        breathPattern: BreathPattern(inhale: 2, exhale: 10, holdFull: 2, holdEmpty: 5)
+    )
+    
     var items = [BreathExercise]()
+    
+    init() {
+        self.items = [test1, test2, test3, test4]
+    }
+    
+    // var items = [BreathExercise]()
     
     // will require init with loading funcionality
 }

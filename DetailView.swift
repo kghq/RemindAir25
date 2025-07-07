@@ -19,6 +19,7 @@ struct DetailView: View {
     var body: some View {
         List {
             Text(exercise.description)
+            Text("\(exercise.id)")
             Section("\(exercise.cycles) Cycles of") {
                 Text("Inhale: \(exercise.breathPattern.exhale.formatted()) sec and 3 sec hold")
                 Text("Exhale: \(exercise.breathPattern.exhale.formatted()) sec and 4 sec hold")
