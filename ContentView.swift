@@ -12,6 +12,11 @@ enum Route: Hashable {
     case timer(UUID)
 }
 
+// Helper for EditView
+struct EditSheetID: Identifiable {
+    var id: UUID
+}
+
 struct ContentView: View {
     
     @Bindable var exercises = Exercises()
@@ -20,6 +25,8 @@ struct ContentView: View {
     @State private var path = NavigationPath()
     
     @State private var showingAdd = false
+    @State private var showingEdit = false
+    @State private var editingID: EditSheetID?
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -30,6 +37,32 @@ struct ContentView: View {
                     List(exercises.items) { exercise in
                         NavigationLink(value: Route.detail(exercise.id)) {
                             Text(exercise.name)
+                        }
+                        .swipeActions(edge: .leading) {
+                            Button("Start") {
+                                path.append(Route.timer(exercise.id))
+                            }
+                            .tint(.orange)
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button("Delete", role: .destructive) {
+                                if let index = exercises.items.firstIndex(where: { $0.id == exercise.id }) {
+                                    exercises.items.remove(at: index)
+                                }
+                            }
+                        }
+                        .contextMenu {
+                            Button("Start", systemImage: "play.circle") {
+                                path.append(Route.timer(exercise.id))
+                            }
+                            Button("Edit", systemImage: "pencil") {
+                                editingID = EditSheetID(id: exercise.id)
+                            }
+                            Button("Delete", systemImage: "trash", role: .destructive) {
+                                if let index = exercises.items.firstIndex(where: { $0.id == exercise.id }) {
+                                    exercises.items.remove(at: index)
+                                }
+                            }
                         }
                     }
                     
@@ -60,6 +93,9 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingAdd) {
                 AddView()
+            }
+            .sheet(item: $editingID) { id in
+                EditView(path: $path, exerciseID: id.id)
             }
         }
         .environment(exercises)

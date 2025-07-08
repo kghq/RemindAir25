@@ -19,6 +19,7 @@ struct EditView: View {
     }
     
     @State private var name = ""
+    
     @State private var description = ""
     
     @State private var inhale = TimeInterval(0)
@@ -27,6 +28,7 @@ struct EditView: View {
     @State private var holdEmpty = TimeInterval(0)
     
     @State private var cycles = 1.0
+    @State private var prepTime = TimeInterval(0)
     @State private var holdingBreath = false
     
     var totalDuration: Double {
@@ -40,7 +42,7 @@ struct EditView: View {
                 // Name and description
                 Section {
                     TextField(exercises.items[index].name, text: $name)
-                    TextField(exercises.items[index].description, text: $description)
+                    TextField((exercises.items[index].description == "" ? "Add a description" : "Add a Description"), text: $description)
                 }
                 
                 // Breath Pattern
@@ -89,8 +91,15 @@ struct EditView: View {
                             .frame(width: 200)
                     }
                     HStack {
+                        Text("\(prepTime.formatted()) sec prep")
+                            .font(.subheadline.smallCaps())
                         Spacer()
-                        Text("Total Duration: \(totalDuration.formatted())")
+                        Slider(value: $prepTime, in: 1...100, step: 1)
+                            .frame(width: 200)
+                    }
+                    HStack {
+                        Spacer()
+                        Text("Total Duration: \(totalDuration.formatted()) + \(prepTime.formatted()) sec Prep")
                             .bold()
                         Spacer()
                     }
@@ -134,6 +143,14 @@ struct EditView: View {
                     Button("Cancel", role: .cancel) {
                         dismiss()
                     }
+                }
+            }
+            
+            // Zeroing the breath hold, when user toggled off
+            .onChange(of: holdingBreath) {
+                if holdingBreath == false {
+                    holdFull = 0
+                    holdEmpty = 0
                 }
             }
             

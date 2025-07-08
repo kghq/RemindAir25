@@ -22,15 +22,19 @@ struct DetailView: View {
     var body: some View {
         if let exercise = exercise {
             List {
-                Text(exercise.description)
-                Text("\(exercise.id)")
-                Section("\(exercise.cycles) Cycles of") {
-                    Text("Inhale: \(exercise.exhale.formatted()) sec and 3 sec hold")
-                    Text("Exhale: \(exercise.exhale.formatted()) sec and 4 sec hold")
-                    //Text("\(exercise.cycles) Cycles")
+                
+                // Description
+                if exercise.description != "" {
+                    Text(exercise.description)
+                }
+                
+                Section {
+                    Text("INHALE: \(exercise.exhale.formatted()) sec + 3 sec HOLD")
+                    Text("EXHALE: \(exercise.exhale.formatted()) sec + 4 sec HOLD")
+                    Text("x \(exercise.cycles) Cycles = \(exercise.totalDuration.formatted()) sec + \(exercise.prepTime.formatted()) sec PREP")
                 }
                 Section {
-                    Button("Start 1 h 20 min Session") {
+                    Button("Start a \(exercise.totalDuration.formatted()) sec Session") {
                         path.append(Route.timer(exercise.id))
                     }
                 }
