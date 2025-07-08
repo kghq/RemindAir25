@@ -118,9 +118,7 @@ struct AddView: View {
                     //let breathPattern = BreathPattern()
                     //let testExercise = BreathExercise(name: "Test", breathPattern: breathPattern, cycles: 3)
                     
-                    let newBreathPattern = BreathPattern(inhale: inhale, exhale: exhale, holdFull: holdFull, holdEmpty: holdEmpty)
-                    
-                    let newBreathExercise = BreathExercise(name: name, description: description, breathPattern: newBreathPattern, cycles: Int(cycles))
+                    let newBreathExercise = BreathExercise(name: name, description: description, cycles: Int(cycles))
                     
                     exercises.items.append(newBreathExercise)
                     dismiss()

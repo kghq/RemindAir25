@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct DetailView: View {
+    
+    @Binding var path: NavigationPath
 
     @Environment(Exercises.self) var exercises
     let exerciseID: UUID
@@ -23,12 +25,14 @@ struct DetailView: View {
                 Text(exercise.description)
                 Text("\(exercise.id)")
                 Section("\(exercise.cycles) Cycles of") {
-                    Text("Inhale: \(exercise.breathPattern.exhale.formatted()) sec and 3 sec hold")
-                    Text("Exhale: \(exercise.breathPattern.exhale.formatted()) sec and 4 sec hold")
+                    Text("Inhale: \(exercise.exhale.formatted()) sec and 3 sec hold")
+                    Text("Exhale: \(exercise.exhale.formatted()) sec and 4 sec hold")
                     //Text("\(exercise.cycles) Cycles")
                 }
                 Section {
-                    Button("Start 1 h 20 min Session") { }
+                    Button("Start 1 h 20 min Session") {
+                        path.append(exercise)
+                    }
                 }
             }
             .navigationTitle(exercise.name)
@@ -60,6 +64,6 @@ struct DetailView: View {
     let model = Exercises.preview
     let id = model.items[0].id
 
-    return DetailView(exerciseID: id)
+    return DetailView(path: .constant(NavigationPath()), exerciseID: id)
         .environment(model)
 }

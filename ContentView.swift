@@ -5,9 +5,6 @@
 //  Created by Krzysztof Garmulewicz on 06/07/2025.
 //
 
-// swipe to delete, long press to edit and start
-// data persistence (file manager)
-
 import SwiftUI
 
 struct ContentView: View {
@@ -23,24 +20,24 @@ struct ContentView: View {
         NavigationStack(path: $path) {
             Group {
                 
-                // ContentUnavailableView
-                if exercises.items.isEmpty {
-                    ContentUnavailableView("No Exercises", systemImage: "wind", description: Text("Tap \"+\" to create an Exercise"))
-                    
                 // Main List
-                } else {
+                if !exercises.items.isEmpty {
                     List(exercises.items) { exercise in
                         NavigationLink(value: exercise.id) {
                             Text(exercise.name)
                         }
                     }
+                    
+                // ContentUnavailableView
+                } else {
+                    ContentUnavailableView("No Exercises", systemImage: "wind", description: Text("Tap \"+\" to create an Exercise"))
                 }
             }
             
             // Navigation
             .navigationTitle("Exercises")
             .navigationDestination(for: UUID.self) { id in
-                DetailView(exerciseID: id)
+                DetailView(path: $path, exerciseID: id)
             }
             
             // Toolbar, Sheet

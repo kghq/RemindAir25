@@ -34,5 +34,3 @@
 //        self.cycles = cycles
 //        self.dateCreated = dateCreated
 //    }
-
-Right now, in the Edit mode, i want to replace the old Exercise with completely new one. But it probably will fuck with the navigation. I will need to do the two-way binding.

@@ -18,8 +18,7 @@ extension Exercises {
         model.items = [
             BreathExercise(
                 name: "Preview Exercise",
-                description: "Preview description",
-                breathPattern: BreathPattern(inhale: 4, exhale: 4, holdFull: 2, holdEmpty: 2),
+                description: "Preview Description",
                 cycles: 5
             )
         ]
@@ -32,25 +31,21 @@ extension Exercises {
     let test1 = BreathExercise(
         name: "Test 1",
         description: "Test 1 description",
-        breathPattern: BreathPattern(inhale: 4, exhale: 4, holdFull: 4, holdEmpty: 4)
     )
     
     let test2 = BreathExercise(
         name: "Test 2",
         description: "Test 2 description",
-        breathPattern: BreathPattern(inhale: 2, exhale: 8, holdFull: 3, holdEmpty: 0)
     )
     
     let test3 = BreathExercise(
         name: "Test 3",
         description: "Test 1 description",
-        breathPattern: BreathPattern(inhale: 10, exhale: 3, holdFull: 5, holdEmpty: 3)
     )
     
     let test4 = BreathExercise(
         name: "Test 4",
         description: "Test 2 description",
-        breathPattern: BreathPattern(inhale: 2, exhale: 10, holdFull: 2, holdEmpty: 5)
     )
     
     var items = [BreathExercise]()
@@ -65,16 +60,28 @@ extension Exercises {
 }
 
 struct BreathExercise: Exercise, Codable, Hashable, Identifiable {
+    
+    // Name and description
     var id = UUID()
     var name = ""
     var description = ""
     
-    var breathPattern: BreathPattern
-    var cycles: Int = 5
-    var totalDuration: TimeInterval {
-        breathPattern.duration * TimeInterval(cycles)
+    // Breath Pattern
+    var inhale: TimeInterval = 4
+    var exhale: TimeInterval = 6
+    var holdFull: TimeInterval = 0
+    var holdEmpty: TimeInterval = 0
+    var breathDuration: TimeInterval {
+        exhale + inhale + holdFull + holdEmpty
     }
     
+    // Exercise Duration
+    var cycles: Int = 5
+    var totalDuration: TimeInterval {
+        breathDuration * TimeInterval(cycles)
+    }
+    
+    // Dates: created and used
     var dateCreated = Date.now
     // date created (watch out for edit so the date isn't replaced by date edited
     var dateUsed = Date.now
