@@ -70,7 +70,7 @@ struct BreathExercise: Exercise, Codable, Hashable, Identifiable {
     var inhale: TimeInterval = 4
     var exhale: TimeInterval = 6
     var holdFull: TimeInterval = 0
-    var holdEmpty: TimeInterval = 0
+    var holdEmpty: TimeInterval = 4
     var breathDuration: TimeInterval {
         exhale + inhale + holdFull + holdEmpty
     }

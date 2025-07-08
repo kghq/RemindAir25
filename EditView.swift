@@ -10,20 +10,21 @@ import SwiftUI
 struct EditView: View {
     
     @Environment(\.dismiss) var dismiss
+    @Binding var path: NavigationPath
     
     @Environment(Exercises.self) var exercises
     let exerciseID: UUID
-    var exercise: BreathExercise? {
-        exercises.items.first { $0.id == exerciseID }
+    var index: Int? {
+        exercises.items.firstIndex { $0.id == exerciseID }
     }
     
     @State private var name = ""
     @State private var description = ""
     
-    @State private var inhale = TimeInterval( 0 )
-    @State private var exhale = TimeInterval( 0 )
-    @State private var holdFull = TimeInterval( 0 )
-    @State private var holdEmpty = TimeInterval( 0 )
+    @State private var inhale = TimeInterval(0)
+    @State private var exhale = TimeInterval(0)
+    @State private var holdFull = TimeInterval(0)
+    @State private var holdEmpty = TimeInterval(0)
     
     @State private var cycles = 1.0
     @State private var holdingBreath = false
@@ -33,13 +34,13 @@ struct EditView: View {
     }
     
     var body: some View {
-        if let exercise = exercise {
+        if let index = index {
             List {
                 
                 // Name and description
                 Section {
-                    TextField(exercise.name, text: $name)
-                    TextField(exercise.description, text: $description)
+                    TextField(exercises.items[index].name, text: $name)
+                    TextField(exercises.items[index].description, text: $description)
                 }
                 
                 // Breath Pattern
@@ -95,24 +96,61 @@ struct EditView: View {
                     }
                 }
                 
+                // Confirm changes
                 Section {
                     Button("Confirm Changes") {
-                        var newExercise = BreathExercise()
-                        newExercise.name = name
-                        newExercise.description = description
                         
+                        // Probably should go to its own funcion
+                        exercises.items[index].name = name
+                        exercises.items[index].description = description
+                        
+                        exercises.items[index].inhale = inhale
+                        exercises.items[index].exhale = exhale
+                        exercises.items[index].holdFull = holdFull
+                        exercises.items[index].holdEmpty = holdEmpty
+                        
+                        exercises.items[index].cycles = Int(cycles)
+                        
+                        dismiss()
                     }
                 }
+                
+                // Delete
                 Section {
-                    Button("Delete", role: .destructive) { }
+                    Button("Delete", role: .destructive) {
+                        exercises.items.remove(at: index)
+                        path = NavigationPath()
+                    }
                 }
             }
-            .navigationTitle("Edit \(exercise.name)")
+            
+            // Navigation
+            .navigationTitle("Edit \(exercises.items[index].name)")
             .navigationBarTitleDisplayMode(.inline)
+            
+            // Toolbar
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel", role: .cancel) {
                         dismiss()
+                    }
+                }
+            }
+            
+            // Setting the initial values to the edited exercise
+            .onAppear {
+                if let exercise = exercises.items.first(where: { $0.id == exerciseID }) {
+                    name = exercise.name
+                    description = exercise.description
+                    inhale = exercise.inhale
+                    exhale = exercise.exhale
+                    holdFull = exercise.holdFull
+                    holdEmpty = exercise.holdEmpty
+                    cycles = Double(exercise.cycles)
+                    if holdFull > 0 || holdEmpty > 0 {
+                        holdingBreath = true
+                    } else {
+                        holdingBreath = false
                     }
                 }
             }
@@ -128,6 +166,6 @@ struct EditView: View {
     let model = Exercises.preview
     let id = model.items[0].id
 
-    return EditView(exerciseID: id)
+    return EditView(path: .constant(NavigationPath()), exerciseID: id)
         .environment(model)
 }

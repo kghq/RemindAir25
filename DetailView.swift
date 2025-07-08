@@ -31,13 +31,13 @@ struct DetailView: View {
                 }
                 Section {
                     Button("Start 1 h 20 min Session") {
-                        path.append(exercise)
+                        path.append(exercise.id)
                     }
                 }
             }
             .navigationTitle(exercise.name)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: BreathExercise.self) { exercise in
+            .navigationDestination(for: UUID.self) { id in
                 TimerView()
             }
             .toolbar {
@@ -49,7 +49,7 @@ struct DetailView: View {
             }
             .sheet(isPresented: $showingEdit) {
                 NavigationStack {
-                    EditView(exerciseID: exercise.id)
+                    EditView(path: $path, exerciseID: exercise.id)
                 }
             }
             
