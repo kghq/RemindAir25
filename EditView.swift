@@ -11,35 +11,50 @@ struct EditView: View {
     
     @Environment(\.dismiss) var dismiss
     
-    var exercise: BreathExercise
+    @Environment(Exercises.self) var exercises
+    let exerciseID: UUID
+    var exercise: BreathExercise? {
+        exercises.items.first { $0.id == exerciseID } // nil coalescing later
+    }
     
     @State private var name = ""
     
     var body: some View {
-        List {
-            Section {
-                TextField(exercise.name, text: $name)
-            }
-            Section {
-                Button("Confirm Changes") {
-                    // replace old one with new
+        if let exercise = exercise {
+            List {
+                Section {
+                    TextField(exercise.name, text: $name)
+                }
+                Section {
+                    Button("Confirm Changes") {
+                        // func that replaces old values with new
+                    }
+                }
+                Section {
+                    Button("Delete", role: .destructive) { }
                 }
             }
-            Section {
-                Button("Delete", role: .destructive) { }
-            }
-        }
-        .toolbar {
-            ToolbarItem {
-                Button("Cancel") {
-                    dismiss()
+            .navigationTitle("Edit \(exercise.name)")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel", role: .cancel) {
+                        dismiss()
+                    }
                 }
             }
+            
+        // Nil handling
+        } else {
+            ContentUnavailableView("Exercise Not Found", systemImage: "exclamationmark.triangle")
         }
     }
 }
 
 #Preview {
-    EditView(exercise: BreathExercise(name: "Test", breathPattern: BreathPattern()))
-    // EditView(exercise: .constant(BreathExercise(breathPattern: BreathPattern())))
+    let model = Exercises.preview
+    let id = model.items[0].id
+
+    return DetailView(exerciseID: id)
+        .environment(model)
 }

@@ -12,6 +12,21 @@ protocol Exercise {
     var totalDuration: TimeInterval { get }
 }
 
+extension Exercises {
+    static var preview: Exercises {
+        let model = Exercises()
+        model.items = [
+            BreathExercise(
+                name: "Preview Exercise",
+                description: "Preview description",
+                breathPattern: BreathPattern(inhale: 4, exhale: 4, holdFull: 2, holdEmpty: 2),
+                cycles: 5
+            )
+        ]
+        return model
+    }
+}
+
 @Observable class Exercises {
     
     let test1 = BreathExercise(

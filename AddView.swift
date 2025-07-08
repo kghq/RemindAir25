@@ -129,7 +129,7 @@ struct AddView: View {
             .navigationTitle("Add New Exercise")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem {
+                ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel", role: .cancel) {
                         dismiss()
                     }

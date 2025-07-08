@@ -22,20 +22,28 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $path) {
             Group {
+                
+                // ContentUnavailableView
                 if exercises.items.isEmpty {
                     ContentUnavailableView("No Exercises", systemImage: "wind", description: Text("Tap \"+\" to create an Exercise"))
+                    
+                // Main List
                 } else {
                     List(exercises.items) { exercise in
-                        NavigationLink(value: exercise) {
+                        NavigationLink(value: exercise.id) {
                             Text(exercise.name)
                         }
                     }
                 }
             }
+            
+            // Navigation
             .navigationTitle("Exercises")
-            .navigationDestination(for: BreathExercise.self) { exercise in
-                DetailView(exercise: exercise)
+            .navigationDestination(for: UUID.self) { id in
+                DetailView(exerciseID: id)
             }
+            
+            // Toolbar, Sheet
             .toolbar {
                 ToolbarItem {
                     Button("Add", systemImage: "plus") {
@@ -46,8 +54,8 @@ struct ContentView: View {
             .sheet(isPresented: $showingAdd) {
                 AddView()
             }
-            .environment(exercises)
         }
+        .environment(exercises)
     }
 }
 
