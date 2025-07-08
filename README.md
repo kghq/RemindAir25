@@ -17,6 +17,8 @@ Data persistence with FileManager
 
 Timer itself (when rough Exercise structure is ready)
 
+Later: add an extension with the NavigationPath
+
 ## Ideas
 Meditation timer settings to userdefaults. Length, sound, or no sound, or any countdown at all (if not, only measure time elapsed, and log to health after done.)
 Tabs: Exercises, Meditation, Stats, Knowledge

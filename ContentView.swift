@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+enum Route: Hashable {
+    case detail(UUID)
+    case timer(UUID)
+}
+
 struct ContentView: View {
     
     @Bindable var exercises = Exercises()
@@ -23,7 +28,7 @@ struct ContentView: View {
                 // Main List
                 if !exercises.items.isEmpty {
                     List(exercises.items) { exercise in
-                        NavigationLink(value: exercise.id) {
+                        NavigationLink(value: Route.detail(exercise.id)) {
                             Text(exercise.name)
                         }
                     }
@@ -36,8 +41,13 @@ struct ContentView: View {
             
             // Navigation
             .navigationTitle("Exercises")
-            .navigationDestination(for: UUID.self) { id in
-                DetailView(path: $path, exerciseID: id)
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .detail(let id):
+                    DetailView(path: $path, exerciseID: id)
+                case .timer(let id):
+                    TimerView(id: id)
+                }
             }
             
             // Toolbar, Sheet

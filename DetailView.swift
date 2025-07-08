@@ -31,15 +31,12 @@ struct DetailView: View {
                 }
                 Section {
                     Button("Start 1 h 20 min Session") {
-                        path.append(exercise.id)
+                        path.append(Route.timer(exercise.id))
                     }
                 }
             }
             .navigationTitle(exercise.name)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: UUID.self) { id in
-                TimerView()
-            }
             .toolbar {
                 ToolbarItem {
                     Button("Edit") {

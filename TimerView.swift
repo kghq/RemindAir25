@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct TimerView: View {
+    
+    let id: UUID
+    
     var body: some View {
         Text("Countdown...")
     }
 }
 
 #Preview {
-    TimerView()
+    TimerView(id: UUID())
 }
