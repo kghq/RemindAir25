@@ -22,7 +22,7 @@ struct ContentView: View {
     @Bindable var exercises = Exercises()
     
     // @State private var path = FileManager.default.currentDirectoryPath
-    // @State private var path = NavigationPath()
+    // @AppStorage("navPath") private var path = NavigationPath()
     @State private var path = NavigationPath()
     
     @State private var showingAdd = false
@@ -82,7 +82,7 @@ struct ContentView: View {
                 case .detail(let id):
                     DetailView(path: $path, exerciseID: id)
                 case .timer(let id):
-                    TimerView(id: id)
+                    TimerView(path: $path, id: id)
                 }
             }
             
@@ -102,6 +102,12 @@ struct ContentView: View {
             }
         }
         .environment(exercises)
+    }
+}
+
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 

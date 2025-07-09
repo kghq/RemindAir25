@@ -10,16 +10,29 @@ import SwiftUI
 struct TimerView: View {
     
     @Environment(Exercises.self) var exercises
+    @Binding var path: NavigationPath
     let id: UUID
     
     var exercise: BreathExercise? {
         exercises.items.first(where: { $0.id == id })
     }
     
+    var index: Int? {
+        exercises.items.firstIndex(where: { $0.id == id })
+    }
+    
     var body: some View {
         if let exercise = exercise {
             Text(formatAsTimer(exercise.totalDuration))
                 .font(.largeTitle)
+            Button("Start") {
+                if let index = index {
+                    exercises.items[index].dateLastUsed = Date.now
+                }
+            }
+            Button("Cancel") {
+                path.removeLast()
+            }
         }
     }
     
@@ -41,6 +54,6 @@ struct TimerView: View {
     let model = Exercises.preview
     let id = model.items[0].id
 
-    return TimerView(id: id)
+    return TimerView(path: .constant(NavigationPath()), id: id)
         .environment(model)
 }
