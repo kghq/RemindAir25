@@ -37,7 +37,9 @@ struct ExerciseFormSection: View {
             Section {
                 TextField("Name", text: $name)
                     .textInputAutocapitalization(.words)
+                    .submitLabel(.return)
                 TextField("Description", text: $description)
+                    .submitLabel(.done)
             }
             
             // Breath Pattern
@@ -46,11 +48,13 @@ struct ExerciseFormSection: View {
                     Text("Inhale")
                     Spacer()
                     TextField("Inhale", value: $inhale, formatter: NumberFormatter())
+                        .bold()
                 }
                 HStack {
                     Text("Exhale")
                     Spacer()
                     TextField("Exhale", value: $exhale, formatter: NumberFormatter())
+                        .bold()
                 }
                 Toggle("Breath Hold", isOn: $holdingBreath.animation())
                 if holdingBreath {
@@ -58,12 +62,20 @@ struct ExerciseFormSection: View {
                         Text("Full")
                         Spacer()
                         TextField("Hold Full", value: $holdFull, formatter: NumberFormatter())
+                            .bold()
                     }
                     HStack {
                         Text("Empty")
                         Spacer()
                         TextField("Hold Empty", value: $holdEmpty, formatter: NumberFormatter())
+                            .bold()
                     }
+                }
+                HStack {
+                    Image(systemName: "wind")
+                    Text("Breath Duration")
+                    Spacer()
+                    Text(breathDuration.formatAsWords())
                 }
             }
             .keyboardType(.decimalPad)
@@ -74,12 +86,14 @@ struct ExerciseFormSection: View {
                 HStack {
                     Text("Breath Count")
                     Spacer()
-                    TextField("Number of Breaths", value: $inhale, formatter: NumberFormatter())
+                    TextField("Number of Breaths", value: $cycles, formatter: NumberFormatter())
+                        .bold()
                 }
                 HStack {
                     Text("Preparation Time")
                     Spacer()
                     TextField("Preparation time", value: $prepTime, formatter: NumberFormatter())
+                        .bold()
                 }
             }
             .keyboardType(.decimalPad)
@@ -87,17 +101,10 @@ struct ExerciseFormSection: View {
             
             Section("Summary") {
                 HStack {
-                    Image(systemName: "wind")
-                    Text("Breath Duration")
-                    Spacer()
-                    Text(breathDuration.formatAsWords())
-                }
-                .bold()
-                HStack {
                     Image(systemName: "clock")
                     Text("Session Duration").bold()
                     Spacer()
-                    Text(totalDuration.formatAsWords()).bold() + Text(" + ") +  Text(prepTime.formatAsWords())
+                    Text(totalDuration.formatAsWords()).bold()
                 }
             }
         }

@@ -23,27 +23,90 @@ struct DetailView: View {
         if let exercise = exercise {
             List {
                 
-                // Description
-                if exercise.description != "" {
-                    Text(exercise.description)
+                // Presentation
+                VStack {
+                    Image(systemName: "wind.circle.fill")
+                        .resizable()
+                        .frame(width: 70, height: 70)
+                        .foregroundStyle(.green)
+                    Text(exercise.name)
+                        .font(.title2.weight(.bold))
+                        .frame(maxWidth: .infinity)
+                    Text(exercise.description).multilineTextAlignment(.center)
+                }
+                .padding(.vertical)
+                
+                // Summary
+                Section("Breath Pattern") {
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Text(exercise.inhale.formatAsWords())
+                            Text("in")
+                                .font(.subheadline.smallCaps())
+                        }
+                        Image(systemName: "arrow.right")
+                            .padding(.horizontal, 5)
+                        VStack {
+                            Text(exercise.holdFull.formatAsWords())
+                            Text("hold")
+                                .font(.subheadline.smallCaps())
+                        }
+                        Image(systemName: "arrow.right")
+                            .padding(.horizontal, 5)
+                        VStack {
+                            Text(exercise.exhale.formatAsWords())
+                            Text("out")
+                                .font(.subheadline.smallCaps())
+                        }
+                        Image(systemName: "arrow.right")
+                            .padding(.horizontal, 5)
+                        VStack {
+                            Text(exercise.holdEmpty.formatAsWords())
+                            Text("hold")
+                                .font(.subheadline.smallCaps())
+                        }
+                        Spacer()
+                    }
                 }
                 
-                Text("Date Created: \(exercise.dateCreated.formatted())")
-                Text("Date Used: \(exercise.dateLastUsed.formatted())")
-                
-                Section {
-                    Text("INHALE: \(exercise.exhale.formatAsWords()) + \(exercise.exhale.formatAsWords())  HOLD")
-                    Text("EXHALE: \(exercise.exhale.formatAsWords()) + \(exercise.exhale.formatAsWords()) HOLD")
-                    Text("x \(exercise.cycles) Cycles = \(exercise.totalDuration.formatAsWords()) + \(exercise.prepTime.formatAsWords()) PREP")
+                // Summary
+                Section("Summary") {
+                    HStack {
+                        Image(systemName: "wind")
+                        Text("Breath Duration")
+                        Spacer()
+                        Text(exercise.breathDuration.formatAsWords())
+                    }
+                    HStack {
+                        Image(systemName: "arrow.trianglehead.2.counterclockwise")
+                        Text("Breath Count")
+                        Spacer()
+                        Image(systemName: "multiply")
+                            .font(.footnote)
+                        Text("\(exercise.cycles)")
+                    }
+                    HStack {
+                        Image(systemName: "clock")
+                        Text("Session Duration")
+                        Spacer()
+                        Text(exercise.totalDuration.formatAsWords())
+                    }
+                    .bold()
+                    HStack {
+                        Text("Preparation Time")
+                        Spacer()
+                        Text("+ \(exercise.prepTime.formatAsWords())")
+                    }
                 }
+                
+                // Start
                 Section {
                     Button("Start a \(exercise.totalDuration.formatAsWords()) Session") {
                         path.append(Route.timer(exercise.id))
                     }
                 }
             }
-            .navigationTitle(exercise.name)
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem {
                     Button("Edit") {

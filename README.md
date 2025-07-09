@@ -54,5 +54,9 @@ check against pasting some text
 additional validation?
 
 ## Breath summary layout
-
+I want to show inhale, exhale, hold full and hold empty time intervals
+I want to show how much will one breath take in total
+I want to show 1 breath x number of breaths
+I want to show total duration
+And i want to show the prep time as optional
 
