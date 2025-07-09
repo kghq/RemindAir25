@@ -6,12 +6,9 @@ WE'll see how far can I go.
 
 ## TODO
 
-2. Change the sliders for NumPad.
-3. Nicer Buttons in Edit, Add, Timer, etc.
-4. Polish the Detail (especially). It has to look good, be functional and usable before moving on.
-
-Next Big thing
-Timer itself
+### Timer
+Countdown, show all the stages, countdown for all the session and individual parts.
+Sound when done. Disappear the clock when done, some nicer screen in the end. Animations.
 
 6. Make Duration editable, and that would set the number of breaths. Or maybe not? We'll see with the NumPad. After all, duration is more important with Meditation. But being able to set the duration of Exercise also makes sense.
 7. Sort by name, date created, date used (is it necessary now?)

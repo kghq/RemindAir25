@@ -102,9 +102,17 @@ struct DetailView: View {
                 
                 // Start
                 Section {
-                    Button("Start a \(exercise.totalDuration.formatAsWords()) Session") {
+                    Button {
                         path.append(Route.timer(exercise.id))
+                    } label: {
+                        HStack {
+                            Image(systemName: "wind")
+                            Text("Start a \(exercise.totalDuration.formatAsWords()) Session")
+                                .bold()
+                        }
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .listRowBackground(Color.blue.opacity(0.1))
                 }
             }
             .toolbar {
