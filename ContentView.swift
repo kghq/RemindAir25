@@ -21,7 +21,8 @@ struct ContentView: View {
     
     @Bindable var exercises = Exercises()
     
-    //@State private var path = FileManager.default.currentDirectoryPath
+    // @State private var path = FileManager.default.currentDirectoryPath
+    // @State private var path = NavigationPath()
     @State private var path = NavigationPath()
     
     @State private var showingAdd = false
@@ -48,6 +49,7 @@ struct ContentView: View {
                             Button("Delete", role: .destructive) {
                                 if let index = exercises.items.firstIndex(where: { $0.id == exercise.id }) {
                                     exercises.items.remove(at: index)
+                                    ExerciseStore.save(exercises.items, to: "exercises.json")
                                 }
                             }
                         }
@@ -61,6 +63,7 @@ struct ContentView: View {
                             Button("Delete", systemImage: "trash", role: .destructive) {
                                 if let index = exercises.items.firstIndex(where: { $0.id == exercise.id }) {
                                     exercises.items.remove(at: index)
+                                    ExerciseStore.save(exercises.items, to: "exercises.json")
                                 }
                             }
                         }

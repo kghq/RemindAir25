@@ -11,7 +11,6 @@ struct EditView: View {
     
     @Environment(\.dismiss) var dismiss
     @Binding var path: NavigationPath
-    
     @Environment(Exercises.self) var exercises
     let exerciseID: UUID
     var index: Int? {
@@ -19,7 +18,6 @@ struct EditView: View {
     }
     
     @State private var name = ""
-    
     @State private var description = ""
     
     @State private var inhale = TimeInterval(0)
@@ -31,13 +29,19 @@ struct EditView: View {
     @State private var prepTime = TimeInterval(0)
     @State private var holdingBreath = false
     
+    @State private var showingConfirmationAlert = false
+    
+    var breathDuration: TimeInterval {
+        inhale + exhale + holdFull + holdEmpty
+    }
+    
     var totalDuration: Double {
-        (inhale + exhale + holdFull + holdEmpty) * cycles
+        breathDuration * cycles
     }
     
     var body: some View {
         if let index = index {
-            List {
+            Form {
                 
                 // Name and description
                 Section {
@@ -79,9 +83,16 @@ struct EditView: View {
                                 .frame(width: 200)
                         }
                     }
+                    HStack {
+                        Image(systemName: "wind")
+                        Text("Breath Duration")
+                        Spacer()
+                        Text(breathDuration.formatAsWords())
+                    }
+                    .bold()
                 }
                 
-                // Number of cycles and duration
+                // Number of cycles and duration, and prep
                 Section {
                     HStack {
                         Text("\(Int(cycles)) breaths")
@@ -98,11 +109,12 @@ struct EditView: View {
                             .frame(width: 200)
                     }
                     HStack {
+                        Image(systemName: "clock")
+                        Text("Total Duration")
                         Spacer()
-                        Text("Total Duration: \(totalDuration.formatted()) + \(prepTime.formatted()) sec Prep")
-                            .bold()
-                        Spacer()
+                        //Text("\(totalDuration.formatAsWords()) + \(prepTime.formatAsWords()) Prep")
                     }
+                    .bold()
                 }
                 
                 // Confirm changes
@@ -127,8 +139,7 @@ struct EditView: View {
                 // Delete
                 Section {
                     Button("Delete", role: .destructive) {
-                        exercises.items.remove(at: index)
-                        path = NavigationPath()
+                        showingConfirmationAlert = true
                     }
                 }
             }
@@ -170,6 +181,15 @@ struct EditView: View {
                         holdingBreath = false
                     }
                 }
+            }
+            
+            .alert("Delete The Exercise?", isPresented: $showingConfirmationAlert) {
+                Button("Delete", role: .destructive) {
+                    exercises.items.remove(at: index)
+                    ExerciseStore.save(exercises.items, to: "exercises.json")
+                    path = NavigationPath()
+                }
+                Button("Cancel", role: .cancel) { }
             }
             
         // Nil handling

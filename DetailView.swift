@@ -28,13 +28,16 @@ struct DetailView: View {
                     Text(exercise.description)
                 }
                 
+                Text("Date Created: \(exercise.dateCreated.formatted())")
+                Text("Date Used: \(exercise.dateLastUsed.formatted())")
+                
                 Section {
-                    Text("INHALE: \(exercise.exhale.formatted()) sec + 3 sec HOLD")
-                    Text("EXHALE: \(exercise.exhale.formatted()) sec + 4 sec HOLD")
-                    Text("x \(exercise.cycles) Cycles = \(exercise.totalDuration.formatted()) sec + \(exercise.prepTime.formatted()) sec PREP")
+                    Text("INHALE: \(exercise.exhale.formatAsWords()) + \(exercise.exhale.formatAsWords())  HOLD")
+                    Text("EXHALE: \(exercise.exhale.formatAsWords()) + \(exercise.exhale.formatAsWords()) HOLD")
+                    Text("x \(exercise.cycles) Cycles = \(exercise.totalDuration.formatAsWords()) + \(exercise.prepTime.formatAsWords()) PREP")
                 }
                 Section {
-                    Button("Start a \(exercise.totalDuration.formatted()) sec Session") {
+                    Button("Start a \(exercise.totalDuration.formatAsWords()) Session") {
                         path.append(Route.timer(exercise.id))
                     }
                 }

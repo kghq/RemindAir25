@@ -36,14 +36,22 @@ struct AddView: View {
     @State private var name: String = ""
     @State private var description: String = ""
     
-    @State private var inhale: TimeInterval = 4
-    @State private var exhale: TimeInterval = 6
-    @State private var holdFull: TimeInterval = 0
-    @State private var holdEmpty: TimeInterval = 0
+    @State private var inhale = TimeInterval(4)
+    @State private var exhale = TimeInterval(6)
+    @State private var holdFull = TimeInterval(0)
+    @State private var holdEmpty = TimeInterval(0)
     
-    @State private var cycles: Double = 1
-    
+    @State private var cycles = 1.0
+    @State private var prepTime = TimeInterval(0)
     @State private var holdingBreath = false
+    
+    var breathDuration: TimeInterval {
+        inhale + exhale + holdFull + holdEmpty
+    }
+    
+    var totalDuration: Double {
+        breathDuration * cycles
+    }
     
     var body: some View {
         
@@ -51,16 +59,15 @@ struct AddView: View {
         
         NavigationStack {
             Form {
-                Section("Name") {
+                
+                // Name and description
+                Section {
                     TextField("Name", text: $name)
-                    //TextField("Description (optional)", text: $description)
+                    TextField("Description (optional)", text: $description)
                 }
                 
-                Section("Description (optional)") {
-                    TextEditor(text: $description)
-                }
-                
-                Section("Breath Pattern") {
+                // Breath Pattern
+                Section("Breath Duration") {
                     HStack {
                         Text("Inhale: \(inhale.formatted()) sec")
                             .font(.subheadline.smallCaps())
@@ -75,10 +82,8 @@ struct AddView: View {
                         Slider(value: $exhale, in: 1...100, step: 1)
                             .frame(width: 200)
                     }
-                }
-                
-                Section {
                     Toggle("Breath Hold", isOn: $holdingBreath.animation())
+                        .font(.subheadline.smallCaps())
                     if holdingBreath {
                         HStack {
                             Text("Full: \(holdFull.formatted()) sec")
@@ -95,9 +100,16 @@ struct AddView: View {
                                 .frame(width: 200)
                         }
                     }
+                    HStack {
+                        Image(systemName: "wind")
+                        Spacer()
+                        Text("\(breathDuration.formatted()) sec")
+                            .bold()
+                    }
                 }
                 
-                Section("Number of Cycles") {
+                // Number of cycles, duration, and prep
+                Section("Total Duration") {
                     HStack {
                         Text("\(Int(cycles)) breaths")
                             .font(.subheadline.smallCaps())
@@ -105,22 +117,37 @@ struct AddView: View {
                         Slider(value: $cycles, in: 1...100, step: 1)
                             .frame(width: 200)
                     }
-                }
-                
-                // warmup, cool down
-                
-                Section("Total duration") {
-                    let totalDuration = Int((inhale + exhale + holdFull + holdEmpty) * cycles)
-                    Text("\(totalDuration) sec")
+                    HStack {
+                        Text("\(prepTime.formatted()) sec prep")
+                            .font(.subheadline.smallCaps())
+                        Spacer()
+                        Slider(value: $prepTime, in: 1...100, step: 1)
+                            .frame(width: 200)
+                    }
+                    HStack {
+                        Image(systemName: "clock")
+                        Spacer()
+                        Text("\(totalDuration.formatted()) + \(prepTime.formatted()) sec Prep")
+                            .bold()
+                    }
                 }
                 
                 Button("Add Exercise") {
-                    //let breathPattern = BreathPattern()
-                    //let testExercise = BreathExercise(name: "Test", breathPattern: breathPattern, cycles: 3)
-                    
-                    let newBreathExercise = BreathExercise(name: name, description: description, cycles: Int(cycles))
+                    let newBreathExercise = BreathExercise(
+                        name: name,
+                        description: description,
+                        inhale: inhale,
+                        exhale: exhale,
+                        holdFull: holdFull,
+                        holdEmpty: holdEmpty,
+                        prepTime: prepTime,
+                        cycles: Int(cycles)
+                    )
                     
                     exercises.items.append(newBreathExercise)
+                    
+                    ExerciseStore.save(exercises.items, to: "exercises.json")
+                    
                     dismiss()
                 }
             }

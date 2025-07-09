@@ -9,13 +9,38 @@ import SwiftUI
 
 struct TimerView: View {
     
+    @Environment(Exercises.self) var exercises
     let id: UUID
     
+    var exercise: BreathExercise? {
+        exercises.items.first(where: { $0.id == id })
+    }
+    
     var body: some View {
-        Text("Countdown...")
+        if let exercise = exercise {
+            Text(formatAsTimer(exercise.totalDuration))
+                .font(.largeTitle)
+        }
+    }
+    
+    func formatAsTimer(_ interval: TimeInterval) -> String {
+        let totalSeconds = Int(interval)
+        let hours = totalSeconds / 3600
+        let minutes = (totalSeconds % 3600) / 60
+        let seconds = totalSeconds % 60
+
+        if hours > 0 {
+            return String(format: "%d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            return String(format: "%d:%02d", minutes, seconds)
+        }
     }
 }
 
 #Preview {
-    TimerView(id: UUID())
+    let model = Exercises.preview
+    let id = model.items[0].id
+
+    return TimerView(id: id)
+        .environment(model)
 }
