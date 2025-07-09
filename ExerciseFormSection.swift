@@ -41,39 +41,51 @@ struct ExerciseFormSection: View {
             }
             
             // Breath Pattern
-            Section {
+            Section("Breath Pattern") {
                 HStack {
-                    Text("Inhale: \(inhale.formatted()) sec")
-                        .font(.subheadline.smallCaps())
+                    Text("Inhale")
                     Spacer()
-                    Slider(value: $inhale, in: 1...100, step: 1)
-                        .frame(width: 200)
+                    TextField("Inhale", value: $inhale, formatter: NumberFormatter())
                 }
                 HStack {
-                    Text("Exhale: \(exhale.formatted()) sec")
-                        .font(.subheadline.smallCaps())
+                    Text("Exhale")
                     Spacer()
-                    Slider(value: $exhale, in: 1...100, step: 1)
-                        .frame(width: 200)
+                    TextField("Exhale", value: $exhale, formatter: NumberFormatter())
                 }
                 Toggle("Breath Hold", isOn: $holdingBreath.animation())
-                    .font(.subheadline.smallCaps())
                 if holdingBreath {
                     HStack {
-                        Text("Full: \(holdFull.formatted()) sec")
-                            .font(.subheadline.smallCaps())
+                        Text("Full")
                         Spacer()
-                        Slider(value: $holdFull, in: 1...100, step: 1)
-                            .frame(width: 200)
+                        TextField("Hold Full", value: $holdFull, formatter: NumberFormatter())
                     }
                     HStack {
-                        Text("Empty: \(holdEmpty.formatted()) sec")
-                            .font(.subheadline.smallCaps())
+                        Text("Empty")
                         Spacer()
-                        Slider(value: $holdEmpty, in: 1...100, step: 1)
-                            .frame(width: 200)
+                        TextField("Hold Empty", value: $holdEmpty, formatter: NumberFormatter())
                     }
                 }
+            }
+            .keyboardType(.decimalPad)
+            .multilineTextAlignment(.trailing)
+            
+            // Number of cycles and duration, and prep
+            Section("Session pattern") {
+                HStack {
+                    Text("Breath Count")
+                    Spacer()
+                    TextField("Number of Breaths", value: $inhale, formatter: NumberFormatter())
+                }
+                HStack {
+                    Text("Preparation Time")
+                    Spacer()
+                    TextField("Preparation time", value: $prepTime, formatter: NumberFormatter())
+                }
+            }
+            .keyboardType(.decimalPad)
+            .multilineTextAlignment(.trailing)
+            
+            Section("Summary") {
                 HStack {
                     Image(systemName: "wind")
                     Text("Breath Duration")
@@ -81,31 +93,12 @@ struct ExerciseFormSection: View {
                     Text(breathDuration.formatAsWords())
                 }
                 .bold()
-            }
-            
-            // Number of cycles and duration, and prep
-            Section {
-                HStack {
-                    Text("\(Int(cycles)) breaths")
-                        .font(.subheadline.smallCaps())
-                    Spacer()
-                    Slider(value: $cycles, in: 1...100, step: 1)
-                        .frame(width: 200)
-                }
-                HStack {
-                    Text("\(prepTime.formatted()) sec prep")
-                        .font(.subheadline.smallCaps())
-                    Spacer()
-                    Slider(value: $prepTime, in: 1...100, step: 1)
-                        .frame(width: 200)
-                }
                 HStack {
                     Image(systemName: "clock")
-                    Text("Total Duration")
+                    Text("Session Duration").bold()
                     Spacer()
-                    Text("\(totalDuration.formatAsWords()) + \(prepTime.formatAsWords()) Prep")
+                    Text(totalDuration.formatAsWords()).bold() + Text(" + ") +  Text(prepTime.formatAsWords())
                 }
-                .bold()
             }
         }
             
@@ -119,8 +112,8 @@ struct ExerciseFormSection: View {
             description: .constant("Description"),
             inhale: .constant(4),
             exhale: .constant(6),
-            holdFull: .constant(2),
-            holdEmpty: .constant(2),
+            holdFull: .constant(0),
+            holdEmpty: .constant(0),
             cycles: .constant(5),
             prepTime: .constant(10),
             holdingBreath: .constant(true)

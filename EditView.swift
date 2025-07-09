@@ -47,6 +47,7 @@ struct EditView: View {
                         
                         dismiss()
                     }
+                    .disabled(!model.isValid())
                 }
                 
                 // Delete

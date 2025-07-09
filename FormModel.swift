@@ -58,5 +58,16 @@ import Foundation
         exercise.prepTime = prepTime
     }
     
+    func isValid() -> Bool {
+        guard !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return false }
+        
+        guard inhale > 0 || exhale > 0 else { return false }
+        
+        guard inhale < 601 && exhale < 601 && holdFull < 601 && holdEmpty < 601 else { return false }
+        
+        guard cycles > 0 else { return false }
+        
+        return true
+    }
     // validation goes here
 }

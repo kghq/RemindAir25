@@ -6,38 +6,16 @@ WE'll see how far can I go.
 
 ## TODO
 
-### Refactor
-
-### Validation
-Required Name
-Time interval sanity checks:
-minimum 1 sec in / out,
-maximum of 10 minutes hold,
-minimum 1 cycle,
-total duration more than 5 sec
-unique name
-.whitespacesAndNewlines
-
-.toolbar {
-    ToolbarItemGroup(placement: .keyboard) {
-        Spacer()
-        Button("Done") {
-            focusedField = nil
-        }
-    }
-}
-
-1. Refactor, especially the Edit and Add
-2. Add Validation (Must have a name, for example. Consider other, minimum duration, for example.)
-3. Change the sliders for NumPad.
-5. Nicer Buttons in Edit, Add, Timer, etc.
-6. Make Duration editable, and that would set the number of breaths.
-7. Sort by name, date created, date used (is it necessary now?)
-8. Description in TextEditor
-9. Polish the Detail (especially), Add and Edit views. They have to look good, be functional and usable before moving on.
+2. Change the sliders for NumPad.
+3. Nicer Buttons in Edit, Add, Timer, etc.
+4. Polish the Detail (especially). It has to look good, be functional and usable before moving on.
 
 Next Big thing
 Timer itself
+
+6. Make Duration editable, and that would set the number of breaths. Or maybe not? We'll see with the NumPad. After all, duration is more important with Meditation. But being able to set the duration of Exercise also makes sense.
+7. Sort by name, date created, date used (is it necessary now?)
+8. Description in TextEditor
 
 then, xctest
 
@@ -56,6 +34,7 @@ Session done: summary on the same screen. Maybe user can go to details directly 
 Haptics: during the exercise (as a guide), as well as in the UI
 Watch Support
 SwiftData and iCloud
+Choosing color and icon
 
 ## Layout
 
@@ -66,3 +45,14 @@ tab 3: WHM. Maybe WHM is so specific that it's better for it to have its separat
 
 ## Future
 With tiles layout, long press to edit, start, and delete. A dedicated button "Play" to move to the TimerView. All the rest of the tile moves to DetailView.
+
+## Concerns about the input in Add and Edit
+align to the right
+indicate that it's seconds, maybe somehow convert to minutes
+numpad
+check against pasting some text
+additional validation?
+
+## Breath summary layout
+
+

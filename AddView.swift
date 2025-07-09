@@ -40,6 +40,7 @@ struct AddView: View {
                     
                     dismiss()
                 }
+                .disabled(!model.isValid())
             }
             .navigationTitle("Add New Exercise")
             .navigationBarTitleDisplayMode(.inline)
