@@ -29,12 +29,12 @@ import Foundation
         exhale = exercise.exhale
         holdFull = exercise.holdFull
         holdEmpty = exercise.holdEmpty
-        cycles = Double(exercise.cycles)
+        cycles = Double(exercise.breathCount)
         prepTime = exercise.prepTime
         holdingBreath = (holdFull > 0 || holdEmpty > 0)
     }
     
-    func toExercise() -> BreathExercise {
+    func newExercise() -> BreathExercise {
         BreathExercise(
             name: name.trimmingCharacters(in: .whitespacesAndNewlines),
             description: description,
@@ -43,7 +43,7 @@ import Foundation
             holdFull: holdFull,
             holdEmpty: holdEmpty,
             prepTime: prepTime,
-            cycles: Int(cycles)
+            breathCount: Int(cycles)
         )
     }
     
@@ -54,17 +54,14 @@ import Foundation
         exercise.exhale = exhale
         exercise.holdFull = holdFull
         exercise.holdEmpty = holdEmpty
-        exercise.cycles = Int(cycles)
+        exercise.breathCount = Int(cycles)
         exercise.prepTime = prepTime
     }
     
     func isValid() -> Bool {
         guard !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return false }
-        
         guard inhale > 0 || exhale > 0 else { return false }
-        
         guard inhale < 601 && exhale < 601 && holdFull < 601 && holdEmpty < 601 else { return false }
-        
         guard cycles > 0 else { return false }
         
         return true

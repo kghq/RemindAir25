@@ -17,7 +17,6 @@ protocol Exercise {
     var items = [BreathExercise]()
     
     init() {
-        
         do {
             try items = ExerciseStore.load(from: "exercises.json")
         } catch {
@@ -44,9 +43,9 @@ struct BreathExercise: Exercise, Codable, Hashable, Identifiable {
     
     // Exercise Duration
     var prepTime: TimeInterval = 10
-    var cycles: Int = 5
+    var breathCount: Int = 5
     var totalDuration: TimeInterval {
-        breathDuration * TimeInterval(cycles)
+        breathDuration * TimeInterval(breathCount)
     }
     
     // Dates: created and used
@@ -63,7 +62,7 @@ extension Exercises {
             BreathExercise(
                 name: "Preview Exercise",
                 description: "Preview Description",
-                cycles: 5
+                breathCount: 5
             )
         ]
         return model

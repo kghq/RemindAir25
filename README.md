@@ -7,6 +7,7 @@ WE'll see how far can I go.
 ## TODO
 
 ### Timer
+1. One timer: Start, pause, stop, stop automatically when 0.
 Countdown, show all the stages, countdown for all the session and individual parts.
 Sound when done. Disappear the clock when done, some nicer screen in the end. Animations.
 

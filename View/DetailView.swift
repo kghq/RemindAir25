@@ -12,9 +12,9 @@ struct DetailView: View {
     @Binding var path: NavigationPath
 
     @Environment(Exercises.self) var exercises
-    let exerciseID: UUID
+    let id: UUID
     var exercise: BreathExercise? {
-        exercises.items.first { $0.id == exerciseID }
+        exercises.items.first { $0.id == id }
     }
     
     @State private var showingEdit = false
@@ -84,7 +84,7 @@ struct DetailView: View {
                         Spacer()
                         Image(systemName: "multiply")
                             .font(.footnote)
-                        Text("\(exercise.cycles)")
+                        Text("\(exercise.breathCount)")
                     }
                     HStack {
                         Image(systemName: "clock")
@@ -124,7 +124,7 @@ struct DetailView: View {
             }
             .sheet(isPresented: $showingEdit) {
                 NavigationStack {
-                    EditView(path: $path, exerciseID: exercise.id)
+                    EditView(path: $path, id: exercise.id)
                 }
             }
             
@@ -139,6 +139,6 @@ struct DetailView: View {
     let model = Exercises.preview
     let id = model.items[0].id
 
-    return DetailView(path: .constant(NavigationPath()), exerciseID: id)
+    return DetailView(path: .constant(NavigationPath()), id: id)
         .environment(model)
 }

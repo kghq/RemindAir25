@@ -12,9 +12,9 @@ struct EditView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var path: NavigationPath
     @Environment(Exercises.self) var exercises
-    let exerciseID: UUID
+    let id: UUID
     var index: Int? {
-        exercises.items.firstIndex { $0.id == exerciseID }
+        exercises.items.firstIndex { $0.id == id }
     }
     
     @Bindable var model = ExerciseFormModel()
@@ -84,7 +84,7 @@ struct EditView: View {
             
             // Setting the initial values to the edited exercise
             .onAppear {
-                if let exercise = exercises.items.first(where: { $0.id == exerciseID }) {
+                if let exercise = exercises.items.first(where: { $0.id == id }) {
                     model.load(from: exercise)
                 }
             }
@@ -113,7 +113,7 @@ struct EditView: View {
 
     return EditView(
         path: .constant(NavigationPath()),
-        exerciseID: exercise.id,
+        id: exercise.id,
         model: model
     )
     .environment(exercises)

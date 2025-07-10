@@ -33,7 +33,7 @@ struct AddView: View {
                 )
                 
                 Button("Add Exercise") {
-                    let newExercise = model.toExercise()
+                    let newExercise = model.newExercise()
                     
                     exercises.items.append(newExercise)
                     ExerciseStore.save(exercises.items, to: "exercises.json")

@@ -21,8 +21,6 @@ struct ContentView: View {
     
     @Bindable var exercises = Exercises()
     
-    // @State private var path = FileManager.default.currentDirectoryPath
-    // @AppStorage("navPath") private var path = NavigationPath()
     @State private var path = NavigationPath()
     
     @State private var showingAdd = false
@@ -80,7 +78,7 @@ struct ContentView: View {
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .detail(let id):
-                    DetailView(path: $path, exerciseID: id)
+                    DetailView(path: $path, id: id)
                 case .timer(let id):
                     TimerView(path: $path, id: id)
                 }
@@ -98,7 +96,7 @@ struct ContentView: View {
                 AddView()
             }
             .sheet(item: $editingID) { id in
-                EditView(path: $path, exerciseID: id.id)
+                EditView(path: $path, id: id.id)
             }
         }
         .environment(exercises)
