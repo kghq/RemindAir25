@@ -7,13 +7,14 @@ WE'll see how far can I go.
 ## TODO
 
 ### Timer
-1. One timer: Start, pause, stop, stop automatically when 0.
 Countdown, show all the stages, countdown for all the session and individual parts.
 Sound when done. Disappear the clock when done, some nicer screen in the end. Animations.
 
 6. Make Duration editable, and that would set the number of breaths. Or maybe not? We'll see with the NumPad. After all, duration is more important with Meditation. But being able to set the duration of Exercise also makes sense.
 7. Sort by name, date created, date used (is it necessary now?)
 8. Description in TextEditor
+9. Refactor TimerView (extract buttons to separate views, etc)
+10. Rename AddView to ExerciseAddView etc
 
 then, xctest
 

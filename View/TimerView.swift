@@ -12,7 +12,7 @@ struct TimerView: View {
     @Environment(Exercises.self) var exercises
     @Binding var path: NavigationPath
     
-    @Bindable var timerModel = TimerModel(initialDuration: 9000) // load the duration from exercise
+    @State private var timerModel: TimerModel? = nil // load the duration from exercise
     
     let id: UUID
     
@@ -25,54 +25,60 @@ struct TimerView: View {
             VStack {
                 Spacer()
                 
-                // Time
-                Text(timerModel.counterFormatted)
-                    .font(.largeTitle)
-                
-                // Button Start / Pause
-                if timerModel.isRunning {
-                    Button {
-                        timerModel.pause()
-                        // path.removeLast()
-                    } label: {
-                        Text("Pause")
-                            .font(.title3)
-                            .bold()
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.bordered)
-                    .tint(.blue)
-                    .padding()
-                } else {
-                    Button {
-                        exercises.items[index].dateLastUsed = Date.now
-                        timerModel.start()
-                    } label: {
-                        // correct line: if exercises.items[index].totalDuration != timerModel.counter {
-                        if 9000 == timerModel.counter {
-                            Text("Start")
-                                .font(.title3)
-                                .bold()
-                                .frame(maxWidth: .infinity)
-                        } else {
-                            Text("Resume")
+                // Main
+                if let timerModel {
+                    
+                    // Timers
+                    Text(timerModel.counterFormatted)
+                        .font(.largeTitle)
+                        .monospacedDigit()
+                    
+                    // Button Start / Pause
+                    if timerModel.isRunning {
+                        
+                        // Pause
+                        Button {
+                            timerModel.pause()
+                            // path.removeLast()
+                        } label: {
+                            Text("Pause")
                                 .font(.title3)
                                 .bold()
                                 .frame(maxWidth: .infinity)
                         }
+                        .buttonStyle(.bordered)
+                        .tint(.blue)
+                        .padding()
+                    } else {
+                        
+                        // Start
+                        if timerModel.counter != 0 {
+                            Button {
+                                exercises.items[index].dateLastUsed = Date.now
+                                timerModel.start()
+                            } label: {
+                                if exercises.items[index].totalDuration != timerModel.counter {
+                                    Text("Start")
+                                        .font(.title3)
+                                        .bold()
+                                        .frame(maxWidth: .infinity)
+                                } else {
+                                    Text("Resume")
+                                        .font(.title3)
+                                        .bold()
+                                        .frame(maxWidth: .infinity)
+                                }
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .padding()
+                        }
                     }
-                    .buttonStyle(.borderedProminent)
-                    .padding()
-                }
-                
-                Spacer()
-                
-                // Button Reset
-                // correct line: if exercises.items[index].totalDuration != timerModel.counter {
-                //if 9000 != timerModel.counter {
+                    
+                    Spacer()
+                    
+                    // Button Reset
                     Button {
-                        // correct line: timerModel.reset(to: exercises.items[index].totalDuration)
-                        timerModel.reset(to: 9000)
+                        timerModel.reset(to: exercises.items[index].totalDuration)
                         // path.removeLast()
                     } label: {
                         Text("Reset")
@@ -82,26 +88,32 @@ struct TimerView: View {
                     }
                     .buttonStyle(.bordered)
                     .padding()
-                    .disabled(timerModel.counter == 9000)
-                //}
-                
-                // Button done
-                Button {
-                    path.removeLast()
-                } label: {
-                    Text("Done")
-                        .font(.title3)
-                        .bold()
-                        .frame(maxWidth: .infinity)
+                    .disabled(timerModel.counter == exercises.items[index].totalDuration)
+                    //}
+                    
+                    // Button done
+                    Button {
+                        path.removeLast()
+                    } label: {
+                        Text("Done")
+                            .font(.title3)
+                            .bold()
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.red)
+                    .padding(.horizontal)
+                } else {
+                    ProgressView("Preparing timer…")
                 }
-                .buttonStyle(.bordered)
-                .tint(.red)
-                .padding(.horizontal)
                 
             }
             .onAppear {
                 // load the timer
+                timerModel = TimerModel(initialDuration: exercises.items[index].totalDuration)
             }
+            
+        // Guard against no timer
         } else {
             ContentUnavailableView("No timer found.", systemImage: "wind")
         }
