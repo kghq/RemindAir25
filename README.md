@@ -8,11 +8,17 @@ WE'll see how far can I go.
 
 ### Timer
 Countdown, show all the stages, countdown for all the session and individual parts.
+It ticks in a weird way: stops, waits a second, and goes with another: i want to start the next the exact moment the previous one hits 0
+Animation: Enlarge the current one, the previous one fades up. Basically It's a queue that goes up. User should see 3 upcoming phases.
+The phases should be labeled
+Animation: Enlarging circle (inhale), change color (progressively as hold), shrinking circle, change color
+Animation: something indicating preparation.
 
 The Timer shows:
 Preparation time (then disappears)
 Total time
 Cycles left
+Name of exercise, maybe?
 Collumn of timers (maybe disappear one by one as the last cycle closes, so in the end no timer is shown?)
 Label for the current and next breath phase (and Prepare, and End, like Starting in... and Done)
 Summary in the future.
@@ -39,6 +45,8 @@ SwiftData and iCloud
 Choosing color and icon
 Live activities, dynamic island
 Larger screen support
+Shortcuts
+Hide navigation while timer is running.
 
 ## Layout
 
@@ -70,3 +78,5 @@ And i want to show the prep time as optional
 3. Description in TextEditor
 4. Refactor TimerView (extract buttons to separate views, etc)
 5. Rename AddView to ExerciseAddView etc
+.listrowbackground
+Dividers between list rows

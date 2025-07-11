@@ -8,7 +8,7 @@
 import Combine
 import Foundation
 
-@Observable class TimerModel {
+@Observable class OldTimerModel {
     private var timerCancellable: Cancellable?
     private var timer: Publishers.Autoconnect<Timer.TimerPublisher>?
     

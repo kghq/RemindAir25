@@ -37,6 +37,11 @@
 			path = Functions;
 			sourceTree = "<group>";
 		};
+		33BF8A522E214DDB002C52C9 /* Trash */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Trash;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +65,7 @@
 				33F648152E1C518A00F789E2 /* Notes.txt */,
 				33F6480D2E1C503E00F789E2 /* RemindAir25App.swift */,
 				33F648082E1C503E00F789E2 /* Assets.xcassets */,
+				33BF8A522E214DDB002C52C9 /* Trash */,
 				33F435A02E1B07BF00EB77F4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -91,6 +97,7 @@
 				33714C532E1F98F800BB8882 /* Model */,
 				33714C552E1F991200BB8882 /* View */,
 				33714C572E1F992800BB8882 /* Functions */,
+				33BF8A522E214DDB002C52C9 /* Trash */,
 			);
 			name = RemindAir25;
 			packageProductDependencies = (

@@ -80,7 +80,11 @@ struct ContentView: View {
                 case .detail(let id):
                     DetailView(path: $path, id: id)
                 case .timer(let id):
-                    TimerView(path: $path, id: id)
+                    if let exercise = exercises.items.first(where: { $0.id == id }) {
+                        TestTimerView(session: ExerciseSessionModel(from: exercise), path: $path, id: id)
+                    } else {
+                        ContentUnavailableView("Exercise not found", systemImage: "xmark.circle")
+                    }
                 }
             }
             
