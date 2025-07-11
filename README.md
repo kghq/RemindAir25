@@ -14,6 +14,8 @@ Preparation time (then disappears)
 Total time
 Cycles left
 Collumn of timers (maybe disappear one by one as the last cycle closes, so in the end no timer is shown?)
+Label for the current and next breath phase (and Prepare, and End, like Starting in... and Done)
+Summary in the future.
 
 Sound when done. Disappear the clock when done, some nicer screen in the end. Animations.
 
@@ -36,6 +38,7 @@ Watch Support
 SwiftData and iCloud
 Choosing color and icon
 Live activities, dynamic island
+Larger screen support
 
 ## Layout
 

@@ -8,24 +8,16 @@
 import Combine
 import Foundation
 
-//@Observable class timerModel {
-//    
-//}
-
 @Observable class TimerModel {
     private var timerCancellable: Cancellable?
     private var timer: Publishers.Autoconnect<Timer.TimerPublisher>?
     
     var counter: TimeInterval
-    var counterFormatted: String {
-        formatAsTimer(counter)
-    }
     
     var isRunning: Bool = false
     
-    init(initialDuration: TimeInterval) {
-        self.counter = initialDuration
-    }
+    // Called when counter reaches 0
+    var onFinished: (() -> ())?
 
     func start() {
         guard !isRunning else { return }
@@ -50,6 +42,7 @@ import Foundation
     private func tick() {
         guard counter > 0 else {
             pause()
+            onFinished?()
             return
         }
         counter -= 1
@@ -59,9 +52,16 @@ import Foundation
         counter = timeDuration
     }
     
-    // Styling
-    func formatAsTimer(_ interval: TimeInterval) -> String {
-        let totalSeconds = Int(interval)
+    init(initialDuration: TimeInterval) {
+        self.counter = initialDuration
+    }
+    
+}
+
+
+extension TimeInterval {
+    func formatAsTimer() -> String {
+        let totalSeconds = Int(self)
         let hours = totalSeconds / 3600
         let minutes = (totalSeconds % 3600) / 60
         let seconds = totalSeconds % 60

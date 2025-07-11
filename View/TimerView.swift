@@ -27,19 +27,29 @@ struct TimerView: View {
                 Spacer()
                 
                 // Main
-                if let timerModel {
+                if let session = sessionModel, let timer = timerModel {
                     
                     // Timers
-                    Text(timerModel.counterFormatted)
-                        .font(.largeTitle)
-                        .monospacedDigit()
+                    ForEach(session.phases) { phase in
+                        if session.currentPhase?.id == phase.id {
+                            Text(session.timer?.counter.formatAsTimer() ?? phase.duration.formatAsTimer())
+                                .monospacedDigit()
+                                .font(.largeTitle)
+//                                .foregroundStyle(.primary)
+                        } else {
+                            Text(phase.duration.formatAsTimer())
+                                .font(.largeTitle)
+//                                .font(.title2)
+//                                .foregroundStyle(.secondary)
+                        }
+                    }
                     
                     // Button Start / Pause
-                    if timerModel.isRunning {
+                    if timer.isRunning {
                         
                         // Pause
                         Button {
-                            timerModel.pause()
+                            session.pause()
                             // path.removeLast()
                         } label: {
                             Text("Pause")
@@ -50,15 +60,16 @@ struct TimerView: View {
                         .buttonStyle(.bordered)
                         .tint(.blue)
                         .padding()
+                        
                     } else {
                         
                         // Start
-                        if timerModel.counter != 0 {
+                        if timer.counter != 0 {
                             Button {
                                 exercises.items[index].dateLastUsed = Date.now
-                                timerModel.start()
+                                session.startPhaseTimer()
                             } label: {
-                                if exercises.items[index].totalDuration != timerModel.counter {
+                                if exercises.items[index].totalDuration != timer.counter {
                                     Text("Start")
                                         .font(.title3)
                                         .bold()
@@ -79,8 +90,7 @@ struct TimerView: View {
                     
                     // Button Reset
                     Button {
-                        timerModel.reset(to: exercises.items[index].totalDuration)
-                        // path.removeLast()
+                        session.reset()                        // path.removeLast()
                     } label: {
                         Text("Reset")
                             .font(.title3)
@@ -89,7 +99,7 @@ struct TimerView: View {
                     }
                     .buttonStyle(.bordered)
                     .padding()
-                    .disabled(timerModel.counter == exercises.items[index].totalDuration)
+                    .disabled(timer.counter == exercises.items[index].totalDuration)
                     //}
                     
                     // Button done
@@ -112,8 +122,12 @@ struct TimerView: View {
             .onAppear {
                 // load the timer and session
                 let exercise = exercises.items[index]
-                timerModel = TimerModel(initialDuration: exercise.totalDuration)
+
                 sessionModel = ExerciseSessionModel(from: exercise)
+                
+                if let phase = sessionModel?.currentPhase {
+                    timerModel = TimerModel(initialDuration: phase.duration)
+                }
             }
             
         // Guard against no timer

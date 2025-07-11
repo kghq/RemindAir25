@@ -8,7 +8,16 @@
 import Foundation
 
 @Observable class ExerciseSessionModel {
+    
+    var timer: TimerModel?
+    
     var phases: [BreathPhase]
+    private(set) var currentPhaseIndex: Int = 0
+    
+    var currentPhase: BreathPhase? {
+        guard currentPhaseIndex < phases.count else { return nil }
+        return phases[currentPhaseIndex]
+    }
     
     enum BreathStep: String {
         case inhale
@@ -16,15 +25,51 @@ import Foundation
         case exhale
         case holdEmpty
     }
-
+    
+    // Main part
     struct BreathPhase: Identifiable {
         let id = UUID()
         let step: BreathStep
         let duration: TimeInterval
     }
     
+    var isFinished: Bool {
+        currentPhaseIndex >= phases.count
+    }
+    
+    func startPhaseTimer() {
+        guard let phase = currentPhase else { return }
+
+        timer = TimerModel(initialDuration: phase.duration)
+        timer?.onFinished = { [weak self] in
+            self?.advanceToNextPhase()
+        }
+        timer?.start()
+    }
+    
+    func pause() {
+        timer?.pause()
+    }
+
+    func reset() {
+//        for i in phases.indices {
+//            phases[i].remainingTime = phases[i].duration
+//        }
+        currentPhaseIndex = 0
+        timer = nil
+    }
+
+    private func advanceToNextPhase() {
+        currentPhaseIndex += 1
+        if !isFinished {
+            startPhaseTimer()
+        } else {
+            timer = nil
+        }
+    }
+    
     init(from exercise: BreathExercise) {
-        phases = []
+        self.phases = []
         
         // Add inhale
         phases.append(BreathPhase(step: .inhale, duration: exercise.inhale))
