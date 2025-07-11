@@ -13,6 +13,7 @@ struct TimerView: View {
     @Binding var path: NavigationPath
     
     @State private var timerModel: TimerModel? = nil // load the duration from exercise
+    @State private var sessionModel: ExerciseSessionModel? = nil
     
     let id: UUID
     
@@ -109,8 +110,10 @@ struct TimerView: View {
                 
             }
             .onAppear {
-                // load the timer
-                timerModel = TimerModel(initialDuration: exercises.items[index].totalDuration)
+                // load the timer and session
+                let exercise = exercises.items[index]
+                timerModel = TimerModel(initialDuration: exercise.totalDuration)
+                sessionModel = ExerciseSessionModel(from: exercise)
             }
             
         // Guard against no timer

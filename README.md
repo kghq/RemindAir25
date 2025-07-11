@@ -8,13 +8,14 @@ WE'll see how far can I go.
 
 ### Timer
 Countdown, show all the stages, countdown for all the session and individual parts.
-Sound when done. Disappear the clock when done, some nicer screen in the end. Animations.
 
-6. Make Duration editable, and that would set the number of breaths. Or maybe not? We'll see with the NumPad. After all, duration is more important with Meditation. But being able to set the duration of Exercise also makes sense.
-7. Sort by name, date created, date used (is it necessary now?)
-8. Description in TextEditor
-9. Refactor TimerView (extract buttons to separate views, etc)
-10. Rename AddView to ExerciseAddView etc
+The Timer shows:
+Preparation time (then disappears)
+Total time
+Cycles left
+Collumn of timers (maybe disappear one by one as the last cycle closes, so in the end no timer is shown?)
+
+Sound when done. Disappear the clock when done, some nicer screen in the end. Animations.
 
 then, xctest
 
@@ -34,6 +35,7 @@ Haptics: during the exercise (as a guide), as well as in the UI
 Watch Support
 SwiftData and iCloud
 Choosing color and icon
+Live activities, dynamic island
 
 ## Layout
 
@@ -59,3 +61,9 @@ I want to show 1 breath x number of breaths
 I want to show total duration
 And i want to show the prep time as optional
 
+## Smaller changes
+1. Make Duration editable, and that would set the number of breaths. Or maybe not? We'll see with the NumPad. After all, duration is more important with Meditation. But being able to set the duration of Exercise also makes sense.
+2. Sort by name, date created, date used (is it necessary now?)
+3. Description in TextEditor
+4. Refactor TimerView (extract buttons to separate views, etc)
+5. Rename AddView to ExerciseAddView etc
