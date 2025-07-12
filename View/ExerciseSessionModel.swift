@@ -13,6 +13,11 @@ import Foundation
     private(set) var currentPhaseIndex: Int = 0
     var startDate: Date
     let totalDuration: TimeInterval
+    
+    // track how much time the session has been paused in total
+    var pauseOffset: TimeInterval = 0
+    private var pauseStart: Date?
+    
     var sessionEndDate: Date {
         startDate + totalDuration
     }
@@ -39,17 +44,6 @@ import Foundation
         }
     }
     
-    // Phase manager
-    
-    var currentPhase: BreathPhase? {
-        guard currentPhaseIndex < phases.count else { return nil }
-        return phases[currentPhaseIndex]
-    }
-    
-    private func advanceToNextPhase() {
-        currentPhaseIndex += 1
-    }
-    
     // Timer controls
     var hasStarted = false
     var isRunning = false
@@ -61,6 +55,8 @@ import Foundation
         hasStarted = true
         isRunning = true
         startDate = Date.now
+        pauseOffset = 0
+        pauseStart = nil // why not zero?
         
         var currentTime = Date.now
         for i in phases.indices {
@@ -71,19 +67,33 @@ import Foundation
     
     func pause() {
         isRunning = false
-        // more code to come
+        pauseStart = Date.now
     }
     
     func resume() {
+        guard !isRunning, let pausedAt = pauseStart else { return } // why do we check here, if isRunning is false?
+        let pauseDuration = Date.now.timeIntervalSince(pausedAt)
+        pauseOffset += pauseDuration
+        pauseStart = nil
         isRunning = true
-        // more code to come
+
+        // Adjust all timers to shift forward
+        startDate += pauseDuration
+        for i in phases.indices {
+            phases[i].startDate = phases[i].startDate?.advanced(by: pauseDuration)
+        }
     }
 
     func reset() {
         hasStarted = false
         isRunning = false
+        pauseOffset = 0
+        pauseStart = nil
+        startDate = .distantFuture
         currentPhaseIndex = 0
-        // more code to come
+        for i in phases.indices {
+            phases[i].startDate = nil
+        }
     }
     
     // Helpers

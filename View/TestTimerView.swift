@@ -42,12 +42,19 @@ struct TestTimerView: View {
                 if session.isRunning {
                     if let phase = session.currentPhase(for: context.date) {
                         if let start = phase.startDate, let end = phase.endDate {
-                            Text(context.date, format: .timer(countingDownIn: start..<end))
-                                .foregroundStyle(.green)
+                            HStack {
+                                Text(context.date, format: .timer(countingDownIn: start..<end))
+                                Text(phase.step.rawValue)
+                            }
+                            .foregroundStyle(.green)
                         }
                     }
                 } else {
-                    Text(session.phases[0].duration.formatAsTimer())
+                    HStack {
+                        Text(session.phases[0].duration.formatAsTimer())
+                        Text(session.phases[0].step.rawValue)
+                    }
+                    .foregroundStyle(.green)
                 }
                 
                 // Upcoming phases
@@ -55,14 +62,20 @@ struct TestTimerView: View {
                     if let currentIndex = session.currentPhaseIndex(for: context.date) {
                         let upcomingPhases = session.phases[currentIndex + 1..<(min(currentIndex + 3, session.phases.count))]
                         ForEach(upcomingPhases) { phase in
-                            Text(phase.duration.formatAsTimer())
-                                .foregroundStyle(.red)
+                            HStack {
+                                Text(phase.duration.formatAsTimer())
+                                Text(phase.step.rawValue)
+                            }
+                            .foregroundStyle(.red)
                         }
                     }
                 } else {
                     ForEach(session.phases.dropFirst().prefix(2)) { phase in
-                        Text(phase.duration.formatAsTimer())
-                            .foregroundStyle(.red)
+                        HStack {
+                            Text(phase.duration.formatAsTimer())
+                            Text(phase.step.rawValue)
+                        }
+                        .foregroundStyle(.red)
                     }
                 }
 //                ForEach (session.phases) { phase in
@@ -75,9 +88,26 @@ struct TestTimerView: View {
 //                .font(.title)
 //                .monospacedDigit()
             }
-            Button("Start") {
-                session.start()
+            
+            HStack {
+                if !session.hasStarted {
+                    Button("Start") {
+                        session.start()
+                    }
+                } else if session.isRunning {
+                    Button("Pause") {
+                        session.pause()
+                    }
+                } else if session.hasStarted {
+                    Button("Resume") {
+                        session.resume()
+                    }
+                    Button("Done") {
+                        session.reset()
+                    }
+                }
             }
+            .buttonStyle(.borderedProminent)
             
         // When Index Failed
         } else {
