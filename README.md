@@ -5,14 +5,14 @@ WE'll see how far can I go.
 
 
 ## TODO
+Fix the paused timers so they display correct values all the time, ditch the placeholders.
+Probably can remove index and id from the TimerView
+Implement and display the Prep time
+Include breath count: how many left, how many to go.
+Breath phases labels
+When this is done, smooth the transitions and add some ending.
 
 ### Timer
-Countdown, show all the stages, countdown for all the session and individual parts.
-It ticks in a weird way: stops, waits a second, and goes with another: i want to start the next the exact moment the previous one hits 0
-Animation: Enlarge the current one, the previous one fades up. Basically It's a queue that goes up. User should see 3 upcoming phases.
-The phases should be labeled
-Animation: Enlarging circle (inhale), change color (progressively as hold), shrinking circle, change color
-Animation: something indicating preparation.
 
 The Timer shows:
 Preparation time (then disappears)
@@ -23,7 +23,12 @@ Collumn of timers (maybe disappear one by one as the last cycle closes, so in th
 Label for the current and next breath phase (and Prepare, and End, like Starting in... and Done)
 Summary in the future.
 
-Sound when done. Disappear the clock when done, some nicer screen in the end. Animations.
+Animation: Enlarge the current one, the previous one fades up. Basically It's a queue that goes up. User should see 3 upcoming phases.
+The phases should be labeled
+Animation: Enlarging circle (inhale), change color (progressively as hold), shrinking circle, change color
+Animation: something indicating preparation.
+
+Chime when done. Disappear the clock when done, some nicer screen in the end. Animations.
 
 then, xctest
 
