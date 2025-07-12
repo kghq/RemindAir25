@@ -86,23 +86,45 @@ import Foundation
         // more code to come
     }
     
+    // Helpers
+    func currentPhase(for date: Date) -> BreathPhase? {
+        return phases.first(where: { phase in
+            guard let start = phase.startDate, let end = phase.endDate else { return false }
+            return start <= date && date < end
+        })
+    }
+    
+    func currentPhaseIndex(for date: Date) -> Int? {
+        phases.firstIndex(where: { phase in
+            guard let start = phase.startDate, let end = phase.endDate else { return false }
+            return start <= date && date < end
+        })
+    }
+    
     // init
     init(from exercise: BreathExercise) {
         self.phases = []
         self.startDate = .distantFuture
         self.totalDuration = exercise.totalDuration
         
+        // Create a single breath
+        var singleBreath = [BreathPhase]()
         // Add inhale
-        phases.append(BreathPhase(step: .inhale, duration: exercise.inhale))
+        singleBreath.append(BreathPhase(step: .inhale, duration: exercise.inhale))
         // Add holdFull
         if exercise.holdFull > 0 {
-            phases.append(BreathPhase(step: .holdFull, duration: exercise.holdFull))
+            singleBreath.append(BreathPhase(step: .holdFull, duration: exercise.holdFull))
         }
         // Add exhale
-        phases.append(BreathPhase(step: .exhale, duration: exercise.exhale))
+        singleBreath.append(BreathPhase(step: .exhale, duration: exercise.exhale))
         // Add holdEmpty
         if exercise.holdEmpty > 0 {
-            phases.append(BreathPhase(step: .holdEmpty, duration: exercise.holdEmpty))
+            singleBreath.append(BreathPhase(step: .holdEmpty, duration: exercise.holdEmpty))
+        }
+        
+        // Single breath times breathCount
+        for _ in 0..<exercise.breathCount {
+            self.phases.append(contentsOf: singleBreath)
         }
     }
 }

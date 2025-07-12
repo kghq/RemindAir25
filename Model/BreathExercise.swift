@@ -62,7 +62,7 @@ extension Exercises {
             BreathExercise(
                 name: "Preview Exercise",
                 description: "Preview Description",
-                breathCount: 1
+                breathCount: 5
             )
         ]
         return model
