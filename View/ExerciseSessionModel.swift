@@ -11,7 +11,11 @@ import Foundation
     
     // Setup values
     private(set) var currentPhaseIndex: Int = 0
-    let startDate = Date.now
+    var startDate: Date
+    let totalDuration: TimeInterval
+    var sessionEndDate: Date {
+        startDate + totalDuration
+    }
     
     // Phases store
     var phases: [BreathPhase]
@@ -27,9 +31,16 @@ import Foundation
         let id = UUID()
         let step: BreathStep
         let duration: TimeInterval
+        
+        var startDate: Date?
+        var endDate: Date? {
+            guard let startDate else { return nil }
+            return startDate.addingTimeInterval(duration)
+        }
     }
     
     // Phase manager
+    
     var currentPhase: BreathPhase? {
         guard currentPhaseIndex < phases.count else { return nil }
         return phases[currentPhaseIndex]
@@ -49,7 +60,13 @@ import Foundation
     func start() {
         hasStarted = true
         isRunning = true
-        // more code to come
+        startDate = Date.now
+        
+        var currentTime = Date.now
+        for i in phases.indices {
+            phases[i].startDate = currentTime
+            currentTime += phases[i].duration
+        }
     }
     
     func pause() {
@@ -72,6 +89,8 @@ import Foundation
     // init
     init(from exercise: BreathExercise) {
         self.phases = []
+        self.startDate = .distantFuture
+        self.totalDuration = exercise.totalDuration
         
         // Add inhale
         phases.append(BreathPhase(step: .inhale, duration: exercise.inhale))

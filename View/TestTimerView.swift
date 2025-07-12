@@ -14,18 +14,7 @@ struct TestTimerView: View {
     @Binding var path: NavigationPath
     let id: UUID
     
-    @State private var startDate = Date.now
-    
     let dateFormatter = Date.FormatStyle(date: .omitted, time: .standard)
-    // Offset shows the distance between the displayed date and future date
-    let futureDate = Date.now.addingTimeInterval(9)
-    var offsetFormatter: SystemFormatStyle.DateOffset {
-        .offset(to: futureDate, allowedFields: [.minute, .second], sign: .never)
-    }
-    // init(countingDownIn:showsHours:maxFieldCount:maxPrecision:)
-    var timerDownStyle: SystemFormatStyle.Timer {
-        .timer(countingDownIn: startDate..<futureDate)
-    }
     
     var index: Int? {
         exercises.items.firstIndex(where: { $0.id == id })
@@ -34,13 +23,28 @@ struct TestTimerView: View {
     var body: some View {
         
         if let index {
-            Text(exercises.items[index].name)
-            TimelineView(.periodic(from: startDate, by: 1)) { context in
-                ForEach (session.phases) { phase in
-                    Text(context.date, format: timerDownStyle)
+            TimelineView(.periodic(from: .now, by: 1)) { context in
+                if session.isRunning {
+                    Text(context.date, format: .timer(countingDownIn: session.startDate..<session.sessionEndDate))
+                        .font(.title).bold()
+                        .monospacedDigit()
+                } else {
+                    Text(exercises.items[index].totalDuration.formatAsTimer())
+                        .font(.title).bold()
+                        .monospacedDigit()
                 }
-                .font(.title).bold()
+                ForEach (session.phases) { phase in
+                    if let start = phase.startDate, let end = phase.endDate {
+                        Text(context.date, format: .timer(countingDownIn: start..<end))
+                    } else {
+                        Text(phase.duration.formatAsTimer())
+                    }
+                }
+                .font(.title)
                 .monospacedDigit()
+            }
+            Button("Start") {
+                session.start()
             }
             
         // When Index Failed
