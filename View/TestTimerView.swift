@@ -17,15 +17,15 @@ struct TestTimerView: View {
         
         Spacer()
         
-        TimelineView(.periodic(from: session.pauseTime, by: 1.0)) { context in
+        TimelineView(.periodic(from: .now, by: 1.0)) { context in
             
-            let displayDate = session.isRunning ? context.date.addingTimeInterval(session.currentPause) : session.pauseTime
+            let displayDate = context.date.addingTimeInterval(-session.effectivePauseDuration)
             
             ForEach(session.adjustedPhases) { phase in
                 Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
             }
             
-            Text(displayDate, format: .timer(countingDownIn: session.resumeTime..<session.resumeTime.addingTimeInterval(session.totalDuration)))
+            Text(displayDate, format: .timer(countingDownIn: session.appearTime..<session.appearTime.addingTimeInterval(session.totalDuration)))
                 .font(.largeTitle)
                 .bold()
                 .monospacedDigit()

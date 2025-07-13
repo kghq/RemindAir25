@@ -41,12 +41,16 @@ import Foundation
     }
     var pauseDuration = 0.0
     
+    var effectivePauseDuration: TimeInterval {
+        isRunning ? pauseDuration : pauseDuration + Date.now.timeIntervalSince(pauseTime)
+    }
+    
     var adjustedPhases: [Phase] {
         return staticPhases.map {
             Phase(
                 type: $0.type,
-                start: $0.start.addingTimeInterval(pauseDuration),
-                end: $0.end.addingTimeInterval(pauseDuration)
+                start: $0.start.addingTimeInterval(effectivePauseDuration),
+                end: $0.end.addingTimeInterval(effectivePauseDuration)
             )
         }
     }
@@ -57,7 +61,6 @@ import Foundation
         isRunning = true
         
         pauseDuration += resumeTime.timeIntervalSince(pauseTime)
-        print(pauseDuration)
         
         // more code to come
     }
@@ -72,7 +75,6 @@ import Foundation
         
         resumeTime = .now
         pauseDuration += resumeTime.timeIntervalSince(pauseTime)
-        print(pauseDuration)
         isRunning = true
     }
     
