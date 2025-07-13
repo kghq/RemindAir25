@@ -9,6 +9,7 @@ Fix the paused timers so they display correct values all the time, ditch the pla
 Probably can remove index and id from the TimerView
 Implement and display the Prep time
 Include breath count: how many left, how many to go.
+Hide all but 3 upcoming timers
 Breath phases labels
 When this is done, smooth the transitions and add some ending.
 

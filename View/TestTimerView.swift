@@ -15,41 +15,42 @@ struct TestTimerView: View {
     
     var body: some View {
         
-        TimelineView(.periodic(from: session.startDate, by: 1.0)) { context in
+        Spacer()
+        
+        TimelineView(.periodic(from: session.pauseTime, by: 1.0)) { context in
             
-            Spacer()
+            let displayDate = session.isRunning ? context.date.addingTimeInterval(session.currentPause) : session.pauseTime
             
-            let displayDate = session.isRunning ? context.date : (session.frozenDate ?? context.date)
-            
-            ForEach(session.phases) { phase in
+            ForEach(session.adjustedPhases) { phase in
                 Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
             }
             
-            Text(displayDate, format: .timer(countingDownIn: session.startDate..<session.startDate.addingTimeInterval(session.totalDuration)))
+            Text(displayDate, format: .timer(countingDownIn: session.resumeTime..<session.resumeTime.addingTimeInterval(session.totalDuration)))
                 .font(.largeTitle)
                 .bold()
                 .monospacedDigit()
                 .foregroundStyle(.red)
-            
-            Spacer()
-            
-            VStack {
-                if !session.hasStarted {
-                    ControlButton(label: "Start", action: session.start)
-                } else {
-                    if session.isRunning {
-                        ControlButton(label: "Pause", action: session.pause)
-                    } else {
-                        ControlButton(label: "Resume", action: session.resume)
-                    }
-                }
-                ControlButton(label: "Reset", action: session.reset)
-                    .disabled(session.isRunning || !session.hasStarted)
-                ControlButton(label: "Done", action: session.done)
-                    .tint(.red)
-            }
-            .padding()
         }
+        
+        Spacer()
+        
+        // Buttons
+        VStack {
+            if !session.hasStarted {
+                ControlButton(label: "Start", action: session.start)
+            } else {
+                if session.isRunning {
+                    ControlButton(label: "Pause", action: session.pause)
+                } else {
+                    ControlButton(label: "Resume", action: session.resume)
+                }
+            }
+            ControlButton(label: "Reset", action: session.reset)
+                .disabled(session.isRunning || !session.hasStarted)
+            ControlButton(label: "Done", action: session.done)
+                .tint(.red)
+        }
+        .padding()
     }
 }
 
