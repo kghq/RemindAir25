@@ -13,74 +13,47 @@ struct TestTimerView: View {
     @Bindable var session: ExerciseSessionModel
     @Binding var path: NavigationPath
     
-    let dateFormatter = Date.FormatStyle(date: .omitted, time: .standard)
-    
     var body: some View {
         
-        TimelineView(.periodic(from: .now, by: 1)) { context in
+        TimelineView(.periodic(from: session.startDate, by: 1.0)) { context in
+            
+            Spacer()
             
             let displayDate = session.isRunning ? context.date : (session.frozenDate ?? context.date)
             
-            // Total Duration
-            if session.currentPhaseIndex < session.phases.count {
-                Text(displayDate, format: .timer(countingDownIn: session.startDate..<session.sessionEndDate))
-                    .font(.title).bold()
-                    .monospacedDigit()
+            ForEach(session.phases) { phase in
+                Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
             }
             
-            // Phases
-                
-            // Current Phase
-            if session.currentPhaseIndex < session.phases.count {
-                if let phase = session.currentPhase(for: context.date) {
-                    HStack {
-                        Text(displayDate, format: .timer(countingDownIn: phase.startDate..<phase.endDate))
-                        //Text(phase.step.rawValue)
-                    }
-                    .foregroundStyle(.blue)
+            Text(displayDate, format: .timer(countingDownIn: session.startDate..<session.startDate.addingTimeInterval(session.totalDuration)))
+                .font(.largeTitle)
+                .bold()
+                .monospacedDigit()
+                .foregroundStyle(.red)
+            
+            Spacer()
+            
+            VStack {
+                if !session.hasStarted {
+                    ControlButton(label: "Start", action: session.start)
                 } else {
-                    Text(session.phases[0].duration.formatAsTimer())
-                        .foregroundStyle(.blue)
-                }
-            }
-            
-            // Upcoming phases
-            if let currentIndex = session.currentPhaseIndex(for: context.date) {
-                let upcomingPhases = session.phases[currentIndex + 1..<(min(currentIndex + 3, session.phases.count))]
-                ForEach(upcomingPhases) { phase in
-                    HStack {
-                        Text(phase.duration.formatAsTimer())
-                        Text(phase.step.rawValue)
+                    if session.isRunning {
+                        ControlButton(label: "Pause", action: session.pause)
+                    } else {
+                        ControlButton(label: "Resume", action: session.resume)
                     }
-                    .foregroundStyle(.red)
                 }
-            } else {
-                let upcomingPhases = session.phases[1..<3]
-                ForEach(upcomingPhases) { phase in
-                    HStack {
-                        Text(phase.duration.formatAsTimer())
-                        Text(phase.step.rawValue)
-                    }
-                    .foregroundStyle(.red)
-                }
+                ControlButton(label: "Reset", action: session.reset)
+                    .disabled(session.isRunning || !session.hasStarted)
+                ControlButton(label: "Done", action: session.done)
+                    .tint(.red)
             }
+            .padding()
         }
-        
-        Spacer()
-        
-        VStack {
-            controlButton(label: "Start", action: session.start)
-            controlButton(label: "Pause", action: session.pause)
-            controlButton(label: "Resume", action: session.resume)
-            controlButton(label: "Reset", action: session.reset)
-            controlButton(label: "Done", action: session.reset)
-            .tint(.red)
-        }
-        .padding()
     }
 }
 
-struct controlButton: View {
+struct ControlButton: View {
     
     let label: String
     let action: () -> ()

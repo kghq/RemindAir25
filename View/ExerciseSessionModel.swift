@@ -11,142 +11,121 @@ import Foundation
 
 @Observable class ExerciseSessionModel {
     
-    // Setup values
-    private(set) var currentPhaseIndex: Int = 0
-    var startDate: Date
-    var frozenDate: Date? = nil
-    var totalDuration: TimeInterval
+    var totalDuration = TimeInterval(0)
     
-    // track how much time the session has been paused in total
-    var pauseOffset: TimeInterval = 0
-    private var pauseStart: Date?
-    
-    var sessionEndDate: Date {
-        startDate + totalDuration
+    // Phase: Breath digested into an exercise
+    struct Phase: Identifiable {
+        var id = UUID()
+        var start: Date
+        var end: Date
     }
     
-    // Phases store
-    var phases: [BreathPhase]
+    var phases: [Phase]
     
-    enum BreathStep: String {
-        case inhale
-        case holdFull
-        case exhale
-        case holdEmpty
-    }
+    var startDate = Date.now
     
-    struct BreathPhase: Identifiable {
-        let id = UUID()
-        let step: BreathStep
-        let duration: TimeInterval
-        
-        var startDate: Date
-        var endDate: Date {
-            startDate + duration
-        }
-    }
-    
-    // Timer controls
+    // Pause/resume controls
     var hasStarted = false
     var isRunning = false
-    var isFinished: Bool {
-        currentPhaseIndex >= phases.count
-    }
+    var frozenDate: Date? = .now // for display
+    // track how much time the session has been paused
+    var pauseOffset: TimeInterval = 0
+    private var pauseStart: Date? = .now
     
     func start() {
         hasStarted = true
-        isRunning = true
-        startDate = Date.now
-        pauseOffset = 0
-        pauseStart = nil
-        
-        var currentTime = Date.now
-        for i in phases.indices {
-            phases[i].startDate = currentTime
-            currentTime += phases[i].duration
-        }
+        resume()
+        // more code to come
     }
     
     func pause() {
         isRunning = false
-        pauseStart = Date.now
+        pauseStart = .now
         frozenDate = .now
     }
     
     func resume() {
-        guard !isRunning, let pausedAt = pauseStart else { return } // why do we check here, if isRunning is false?
-        let pauseDuration = Date.now.timeIntervalSince(pausedAt)
-        pauseOffset += pauseDuration
+        guard !isRunning, let pausedAt = pauseStart else { return }
+        pauseOffset = Date.now.timeIntervalSince(pausedAt)
         pauseStart = nil
         frozenDate = nil
         isRunning = true
-
+        
         // Adjust all timers to shift forward
-        startDate += pauseDuration
+        startDate += pauseOffset
         for i in phases.indices {
-            phases[i].startDate = phases[i].startDate.advanced(by: pauseDuration)
+            phases[i].start = phases[i].start.advanced(by: pauseOffset)
+            phases[i].end = phases[i].end.advanced(by: pauseOffset)
         }
     }
-
+    
     func reset() {
-        hasStarted = false
-        isRunning = false
-        pauseOffset = 0
-        pauseStart = nil
-        startDate = .distantFuture
-        currentPhaseIndex = 0
-        for i in phases.indices {
-            phases[i].startDate = .distantFuture
+        // more code to come
+    }
+    
+    func done() {
+        // more code to come
+    }
+    
+    init(from exercise: BreathExercise) {
+        
+        self.phases = []
+        
+        for _ in 0..<exercise.breathCount {
+            // Add inhale
+            phases.append(Phase(
+                start: startDate.addingTimeInterval(totalDuration),
+                end: startDate.addingTimeInterval(exercise.inhale + totalDuration)
+            ))
+            totalDuration += exercise.inhale
+            // Add holdIn
+            phases.append(Phase(
+                start: startDate.addingTimeInterval(totalDuration),
+                end: startDate.addingTimeInterval(exercise.holdFull + totalDuration)
+            ))
+            totalDuration += exercise.holdFull
+            // Add exhale
+            phases.append(Phase(
+                start: startDate.addingTimeInterval(totalDuration),
+                end: startDate.addingTimeInterval(exercise.exhale + totalDuration)
+            ))
+            totalDuration += exercise.exhale
+            // Add holdOut
+            phases.append(Phase(
+                start: startDate.addingTimeInterval(totalDuration),
+                end: startDate.addingTimeInterval(exercise.holdEmpty + totalDuration)
+            ))
+            totalDuration += exercise.holdEmpty
         }
-    }
-    
-    // Helpers
-    func currentPhase(for date: Date) -> BreathPhase? {
-        return phases.first(where: { phase in
-            let start = phase.startDate
-            let end = phase.endDate
-            return start <= date && date < end
-        })
-    }
-    
-    func currentPhaseIndex(for date: Date) -> Int? {
-        phases.firstIndex(where: { phase in
-            
-            let start = phase.startDate
-            let end = phase.endDate
-            return start <= date && date < end
-        })
     }
     
     // init
-    init(from exercise: BreathExercise) {
-        self.phases = []
-        self.startDate = .distantFuture
-        self.totalDuration = TimeInterval(0)
-        
-        // Create a single breath
-        let currentTime = startDate
-        var singleBreath = [BreathPhase]()
-        // Add inhale
-        singleBreath.append(BreathPhase(step: .inhale, duration: exercise.inhale, startDate: currentTime))
-        // Add holdFull
-        if exercise.holdFull > 0 {
-            singleBreath.append(BreathPhase(step: .holdFull, duration: exercise.holdFull, startDate: currentTime))
-        }
-        // Add exhale
-        singleBreath.append(BreathPhase(step: .exhale, duration: exercise.exhale, startDate: currentTime))
-        // Add holdEmpty
-        if exercise.holdEmpty > 0 {
-            singleBreath.append(BreathPhase(step: .holdEmpty, duration: exercise.holdEmpty, startDate: currentTime))
-        }
-        
-        // Single breath times breathCount
-        for _ in 0..<exercise.breathCount {
-            self.phases.append(contentsOf: singleBreath)
-        }
-        
-        for breath in phases {
-            totalDuration += breath.duration
-        }
-    }
+//    init(from exercise: BreathExercise) {
+//        self.phases = []
+//        
+//        // Create a single breath
+//        let currentTime = startDate
+//        var singleBreath = [BreathPhase]()
+//        // Add inhale
+//        singleBreath.append(BreathPhase(step: .inhale, duration: exercise.inhale, start: currentTime))
+//        // Add holdFull
+//        if exercise.holdFull > 0 {
+//            singleBreath.append(BreathPhase(step: .holdFull, duration: exercise.holdFull, start: currentTime))
+//        }
+//        // Add exhale
+//        singleBreath.append(BreathPhase(step: .exhale, duration: exercise.exhale, start: currentTime))
+//        // Add holdEmpty
+//        if exercise.holdEmpty > 0 {
+//            singleBreath.append(BreathPhase(step: .holdEmpty, duration: exercise.holdEmpty, start: currentTime))
+//        }
+//        
+//        // Single breath times breathCount
+//        for _ in 0..<exercise.breathCount {
+//            self.phases.append(contentsOf: singleBreath)
+//        }
+//        
+//        for breath in phases {
+//            totalDuration += breath.duration
+//        }
+//    }
 }
