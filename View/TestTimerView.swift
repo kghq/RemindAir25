@@ -19,13 +19,19 @@ struct TestTimerView: View {
         
         TimelineView(.periodic(from: .now, by: 1.0)) { context in
             
-            let displayDate = context.date.addingTimeInterval(-session.effectivePauseDuration)
-            
-            ForEach(session.adjustedPhases) { phase in
+            let now = context.date
+            let shift = session.shift(at: now)
+            let displayDate = now
+            let shiftedPhases = session.shiftedPhases(by: shift)
+
+            ForEach(shiftedPhases) { phase in
                 Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
+                    .monospacedDigit()
             }
-            
-            Text(displayDate, format: .timer(countingDownIn: session.appearTime..<session.appearTime.addingTimeInterval(session.totalDuration)))
+
+            let shiftedStart = session.appearTime.addingTimeInterval(shift)
+            let shiftedEnd = shiftedStart.addingTimeInterval(session.totalDuration)
+            Text(displayDate, format: .timer(countingDownIn: shiftedStart..<shiftedEnd))
                 .font(.largeTitle)
                 .bold()
                 .monospacedDigit()

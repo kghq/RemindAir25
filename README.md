@@ -5,13 +5,14 @@ WE'll see how far can I go.
 
 
 ## TODO
-Fix the paused timers so they display correct values all the time, ditch the placeholders.
-Probably can remove index and id from the TimerView
+Reset
 Implement and display the Prep time
 Include breath count: how many left, how many to go.
 Hide all but 3 upcoming timers
 Breath phases labels
+Done
 When this is done, smooth the transitions and add some ending.
+Ending will probably be some kind of summary: time spent, number of breaths, or something.
 
 ### Timer
 

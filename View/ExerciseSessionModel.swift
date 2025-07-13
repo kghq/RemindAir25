@@ -23,7 +23,6 @@ import Foundation
     struct Phase: Identifiable {
         var id = UUID()
         var type: BreathType
-        var offset = 0.0
         
         var start: Date
         var end: Date
@@ -45,12 +44,16 @@ import Foundation
         isRunning ? pauseDuration : pauseDuration + Date.now.timeIntervalSince(pauseTime)
     }
     
-    var adjustedPhases: [Phase] {
+    func shiftedPhases(at date: Date) -> [Phase] {
+        let shift = isRunning
+            ? pauseDuration
+            : pauseDuration + date.timeIntervalSince(pauseTime)
+        
         return staticPhases.map {
             Phase(
                 type: $0.type,
-                start: $0.start.addingTimeInterval(effectivePauseDuration),
-                end: $0.end.addingTimeInterval(effectivePauseDuration)
+                start: $0.start.addingTimeInterval(shift),
+                end: $0.end.addingTimeInterval(shift)
             )
         }
     }
@@ -84,6 +87,21 @@ import Foundation
     
     func done() {
         // more code to come
+    }
+    
+    // Helpers
+    func shift(at date: Date) -> TimeInterval {
+        isRunning ? pauseDuration : pauseDuration + date.timeIntervalSince(pauseTime)
+    }
+
+    func shiftedPhases(by shift: TimeInterval) -> [Phase] {
+        staticPhases.map {
+            Phase(
+                type: $0.type,
+                start: $0.start.addingTimeInterval(shift),
+                end: $0.end.addingTimeInterval(shift)
+            )
+        }
     }
     
     init(from exercise: BreathExercise) {
