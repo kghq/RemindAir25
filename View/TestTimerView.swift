@@ -54,15 +54,19 @@ struct TestTimerView: View {
             VStack {
                 if !session.hasStarted {
                     ControlButton(label: "Start", action: session.start)
+                        .tint(.blue)
                 }
                 if session.isFinished {
                     ControlButton(label: "Start Again", action: session.reset)
+                        .tint(.blue)
                 }
                 if session.isRunning {
                     ControlButton(label: "Pause", action: session.pause)
+                        .tint(.blue)
                 }
                 if session.hasStarted && !session.isRunning {
                     ControlButton(label: "Resume", action: session.resume)
+                        .tint(.blue)
                 }
                 HStack {
                     ControlButton(label: "Reset", action: session.reset)
