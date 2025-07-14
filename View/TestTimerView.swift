@@ -22,13 +22,24 @@ struct TestTimerView: View {
             let now = context.date
             let shift = session.shift(at: now)
             let displayDate = now
+            
+            // Preparation timer
+            if session.preparationDuration > 0 && !session.prepDone {
+                let prepEnd = session.appearTime.addingTimeInterval(session.preparationDuration)
+                Text(displayDate, format: .timer(countingDownIn: session.appearTime..<prepEnd))
+                    .font(.title2)
+                    .monospacedDigit()
+                    .foregroundStyle(.blue)
+            }
+            
+            // Phase Timers
             let shiftedPhases = session.shiftedPhases(by: shift)
-
             ForEach(shiftedPhases) { phase in
                 Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
                     .monospacedDigit()
             }
 
+            // Total Duration Timer
             let shiftedStart = session.appearTime.addingTimeInterval(shift)
             let shiftedEnd = shiftedStart.addingTimeInterval(session.totalDuration)
             Text(displayDate, format: .timer(countingDownIn: shiftedStart..<shiftedEnd))
@@ -36,6 +47,7 @@ struct TestTimerView: View {
                 .bold()
                 .monospacedDigit()
                 .foregroundStyle(.red)
+            
         }
         
         Spacer()
@@ -51,10 +63,12 @@ struct TestTimerView: View {
                     ControlButton(label: "Resume", action: session.resume)
                 }
             }
-            ControlButton(label: "Reset", action: session.reset)
-                .disabled(session.isRunning || !session.hasStarted)
-            ControlButton(label: "Done", action: session.done)
-                .tint(.red)
+            HStack {
+                ControlButton(label: "Reset", action: session.reset)
+                    .disabled(session.isRunning || !session.hasStarted)
+                ControlButton(label: "Done", action: session.done)
+                    .tint(.red)
+            }
         }
         .padding()
     }

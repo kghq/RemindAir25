@@ -13,6 +13,7 @@ Breath phases labels
 Done
 When this is done, smooth the transitions and add some ending.
 Ending will probably be some kind of summary: time spent, number of breaths, or something.
+Done button: if started, end and save session, if not, go to the previous screen
 
 ### Timer
 
@@ -54,6 +55,7 @@ Live activities, dynamic island
 Larger screen support
 Shortcuts
 Hide navigation while timer is running.
+Integration with Spotlight, Siri, and Shortcuts
 
 ## Layout
 

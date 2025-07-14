@@ -13,6 +13,7 @@ import Foundation
     
     // Foundational properties
     let appearTime = Date.now
+    let preparationDuration: TimeInterval
     var totalDuration: TimeInterval
     
     // Phase: Breath digested into an exercise
@@ -30,6 +31,11 @@ import Foundation
     
     var staticPhases: [Phase]
     
+    // Preparation logic
+    var prepDone: Bool {
+        Date.now >= appearTime.addingTimeInterval(preparationDuration + effectivePauseDuration)
+    }
+    
     // Pause/resume controls
     var hasStarted = false
     var isRunning = false
@@ -45,9 +51,14 @@ import Foundation
     }
     
     func shiftedPhases(at date: Date) -> [Phase] {
-        let shift = isRunning
-            ? pauseDuration
-            : pauseDuration + date.timeIntervalSince(pauseTime)
+        let shift: TimeInterval
+        if prepDone {
+            shift = isRunning
+                ? pauseDuration
+                : pauseDuration + date.timeIntervalSince(pauseTime)
+        } else {
+            shift = 0 // Freeze timers before prep ends
+        }
         
         return staticPhases.map {
             Phase(
@@ -107,6 +118,7 @@ import Foundation
     init(from exercise: BreathExercise) {
         
         self.staticPhases = []
+        self.preparationDuration = exercise.prepTime
         self.totalDuration = 0.0
         
         for _ in 0..<exercise.breathCount {
