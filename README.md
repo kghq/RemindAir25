@@ -5,8 +5,6 @@ WE'll see how far can I go.
 
 
 ## TODO
-Reset
-Implement and display the Prep time
 Include breath count: how many left, how many to go.
 Hide all but 3 upcoming timers
 Breath phases labels
@@ -14,6 +12,7 @@ Done
 When this is done, smooth the transitions and add some ending.
 Ending will probably be some kind of summary: time spent, number of breaths, or something.
 Done button: if started, end and save session, if not, go to the previous screen
+Clean up the files and folders
 
 ### Timer
 

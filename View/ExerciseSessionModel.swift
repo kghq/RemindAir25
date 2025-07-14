@@ -12,7 +12,7 @@ import Foundation
 @Observable class ExerciseSessionModel {
     
     // Foundational properties
-    let appearTime = Date.now
+    var appearTime = Date.now
     let preparationDuration: TimeInterval
     var totalDuration: TimeInterval
     
@@ -94,7 +94,12 @@ import Foundation
     }
     
     func reset() {
-        // more code to come
+        appearTime = Date.now
+        hasStarted = false
+        isRunning = false
+        pauseTime = appearTime
+        resumeTime = appearTime
+        pauseDuration = 0.0
     }
     
     func done() {

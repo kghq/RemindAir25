@@ -43,7 +43,6 @@ struct TestTimerView: View {
             let baseStart = session.appearTime.addingTimeInterval(session.preparationDuration)
             let totalStart = baseStart.addingTimeInterval(shift)
             let totalEnd = totalStart.addingTimeInterval(session.totalDuration)
-
             Text(displayDate, format: .timer(countingDownIn: totalStart..<totalEnd))
                 .font(.largeTitle)
                 .bold()
