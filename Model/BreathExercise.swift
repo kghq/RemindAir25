@@ -33,10 +33,10 @@ struct BreathExercise: Exercise, Codable, Hashable, Identifiable {
     var description = ""
     
     // Breath Pattern
-    var inhale: TimeInterval = 1
+    var inhale: TimeInterval = 3
     var exhale: TimeInterval = 2
     var holdFull: TimeInterval = 0
-    var holdEmpty: TimeInterval = 3
+    var holdEmpty: TimeInterval = 1
     var breathDuration: TimeInterval {
         exhale + inhale + holdFull + holdEmpty
     }

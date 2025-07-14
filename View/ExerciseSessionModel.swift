@@ -106,6 +106,11 @@ import Foundation
         pauseDuration = 0.0
     }
     
+//    func reset() {
+//        appearTime = Date.now
+//        hasStarted = false
+//    }
+    
     func done() {
         // more code to come
     }

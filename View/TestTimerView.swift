@@ -26,12 +26,10 @@ struct TestTimerView: View {
             
             // Preparation timer
             let prepRange = session.shiftedPrepRange(at: now)
-            if session.preparationDuration > 0 && !session.prepDone(at: now) {
-                Text(displayDate, format: .timer(countingDownIn: prepRange))
-                    .font(.title2)
-                    .monospacedDigit()
-                    .foregroundStyle(.blue)
-            }
+            Text(displayDate, format: .timer(countingDownIn: prepRange))
+                .font(.title2)
+                .monospacedDigit()
+                .foregroundStyle(.blue)
             
             // Phase Timers
             let shiftedPhases = session.shiftedPhases(by: shift)
@@ -54,17 +52,17 @@ struct TestTimerView: View {
             
             // Buttons
             VStack {
+                if !session.hasStarted {
+                    ControlButton(label: "Start", action: session.start)
+                }
                 if session.isFinished {
                     ControlButton(label: "Start Again", action: session.reset)
                 }
-                if !session.hasStarted {
-                    ControlButton(label: "Start", action: session.start)
-                } else {
-                    if session.isRunning {
-                        ControlButton(label: "Pause", action: session.pause)
-                    } else {
-                        ControlButton(label: "Resume", action: session.resume)
-                    }
+                if session.isRunning {
+                    ControlButton(label: "Pause", action: session.pause)
+                }
+                if session.hasStarted && !session.isRunning {
+                    ControlButton(label: "Resume", action: session.resume)
                 }
                 HStack {
                     ControlButton(label: "Reset", action: session.reset)
@@ -77,10 +75,6 @@ struct TestTimerView: View {
             
         }
     }
-    
-//    private func updateTime(_ date: Date) {
-//        session.currentTime = date
-//    }
 }
 
 struct ControlButton: View {
