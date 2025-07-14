@@ -24,9 +24,9 @@ struct TestTimerView: View {
             let displayDate = now
             
             // Preparation timer
-            if session.preparationDuration > 0 && !session.prepDone {
-                let prepEnd = session.appearTime.addingTimeInterval(session.preparationDuration)
-                Text(displayDate, format: .timer(countingDownIn: session.appearTime..<prepEnd))
+            let prepRange = session.shiftedPrepRange(at: now)
+            if session.preparationDuration > 0 && !session.prepDone(at: now) {
+                Text(displayDate, format: .timer(countingDownIn: prepRange))
                     .font(.title2)
                     .monospacedDigit()
                     .foregroundStyle(.blue)
@@ -40,9 +40,11 @@ struct TestTimerView: View {
             }
 
             // Total Duration Timer
-            let shiftedStart = session.appearTime.addingTimeInterval(shift)
-            let shiftedEnd = shiftedStart.addingTimeInterval(session.totalDuration)
-            Text(displayDate, format: .timer(countingDownIn: shiftedStart..<shiftedEnd))
+            let baseStart = session.appearTime.addingTimeInterval(session.preparationDuration)
+            let totalStart = baseStart.addingTimeInterval(shift)
+            let totalEnd = totalStart.addingTimeInterval(session.totalDuration)
+
+            Text(displayDate, format: .timer(countingDownIn: totalStart..<totalEnd))
                 .font(.largeTitle)
                 .bold()
                 .monospacedDigit()

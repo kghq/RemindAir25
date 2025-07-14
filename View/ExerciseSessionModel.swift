@@ -32,8 +32,14 @@ import Foundation
     var staticPhases: [Phase]
     
     // Preparation logic
-    var prepDone: Bool {
-        Date.now >= appearTime.addingTimeInterval(preparationDuration + effectivePauseDuration)
+    func prepDone(at date: Date) -> Bool {
+        date >= appearTime.addingTimeInterval(preparationDuration + effectivePauseDuration)
+    }
+    
+    func shiftedPrepRange(at date: Date) -> Range<Date> {
+        let shift = isRunning ? pauseDuration : pauseDuration + date.timeIntervalSince(pauseTime)
+        let start = appearTime.addingTimeInterval(shift)
+        return start..<start.addingTimeInterval(preparationDuration)
     }
     
     // Pause/resume controls
@@ -51,15 +57,10 @@ import Foundation
     }
     
     func shiftedPhases(at date: Date) -> [Phase] {
-        let shift: TimeInterval
-        if prepDone {
-            shift = isRunning
-                ? pauseDuration
-                : pauseDuration + date.timeIntervalSince(pauseTime)
-        } else {
-            shift = 0 // Freeze timers before prep ends
-        }
-        
+        let shift = isRunning
+            ? pauseDuration
+            : pauseDuration + date.timeIntervalSince(pauseTime)
+
         return staticPhases.map {
             Phase(
                 type: $0.type,
@@ -121,39 +122,43 @@ import Foundation
         self.preparationDuration = exercise.prepTime
         self.totalDuration = 0.0
         
+        let realStartTime = appearTime.addingTimeInterval(preparationDuration)
+        var phaseStart = realStartTime
+
         for _ in 0..<exercise.breathCount {
-            // Add inhale
             staticPhases.append(Phase(
                 type: .inhale,
-                start: appearTime.addingTimeInterval(totalDuration),
-                end: appearTime.addingTimeInterval(exercise.inhale + totalDuration)
+                start: phaseStart,
+                end: phaseStart.addingTimeInterval(exercise.inhale)
             ))
-            totalDuration += exercise.inhale
-            // Add holdFull
+            phaseStart += exercise.inhale
+
             if exercise.holdFull > 0 {
                 staticPhases.append(Phase(
                     type: .holdFull,
-                    start: appearTime.addingTimeInterval(totalDuration),
-                    end: appearTime.addingTimeInterval(exercise.holdFull + totalDuration)
+                    start: phaseStart,
+                    end: phaseStart.addingTimeInterval(exercise.holdFull)
                 ))
+                phaseStart += exercise.holdFull
             }
-            totalDuration += exercise.holdFull
-            // Add exhale
+
             staticPhases.append(Phase(
                 type: .exhale,
-                start: appearTime.addingTimeInterval(totalDuration),
-                end: appearTime.addingTimeInterval(exercise.exhale + totalDuration)
+                start: phaseStart,
+                end: phaseStart.addingTimeInterval(exercise.exhale)
             ))
-            totalDuration += exercise.exhale
-            // Add holdEmpty
+            phaseStart += exercise.exhale
+
             if exercise.holdEmpty > 0 {
                 staticPhases.append(Phase(
                     type: .holdEmpty,
-                    start: appearTime.addingTimeInterval(totalDuration),
-                    end: appearTime.addingTimeInterval(exercise.holdEmpty + totalDuration)
+                    start: phaseStart,
+                    end: phaseStart.addingTimeInterval(exercise.holdEmpty)
                 ))
-                totalDuration += exercise.holdEmpty
+                phaseStart += exercise.holdEmpty
             }
         }
+
+        self.totalDuration = phaseStart.timeIntervalSince(realStartTime)
     }
 }
