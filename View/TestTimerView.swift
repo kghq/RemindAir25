@@ -15,10 +15,11 @@ struct TestTimerView: View {
     
     var body: some View {
         
-        Spacer()
-        
         TimelineView(.periodic(from: .now, by: 1.0)) { context in
             
+            Spacer()
+            
+            // let _ = updateTime(context.date)
             let now = context.date
             let shift = session.shift(at: now)
             let displayDate = now
@@ -49,30 +50,37 @@ struct TestTimerView: View {
                 .monospacedDigit()
                 .foregroundStyle(.red)
             
-        }
-        
-        Spacer()
-        
-        // Buttons
-        VStack {
-            if !session.hasStarted {
-                ControlButton(label: "Start", action: session.start)
-            } else {
-                if session.isRunning {
-                    ControlButton(label: "Pause", action: session.pause)
+            Spacer()
+            
+            // Buttons
+            VStack {
+                if session.isFinished {
+                    ControlButton(label: "Start Again", action: session.reset)
+                }
+                if !session.hasStarted {
+                    ControlButton(label: "Start", action: session.start)
                 } else {
-                    ControlButton(label: "Resume", action: session.resume)
+                    if session.isRunning {
+                        ControlButton(label: "Pause", action: session.pause)
+                    } else {
+                        ControlButton(label: "Resume", action: session.resume)
+                    }
+                }
+                HStack {
+                    ControlButton(label: "Reset", action: session.reset)
+                        .disabled(session.isRunning || !session.hasStarted)
+                    ControlButton(label: "Done", action: session.done)
+                        .tint(.red)
                 }
             }
-            HStack {
-                ControlButton(label: "Reset", action: session.reset)
-                    .disabled(session.isRunning || !session.hasStarted)
-                ControlButton(label: "Done", action: session.done)
-                    .tint(.red)
-            }
+            .padding()
+            
         }
-        .padding()
     }
+    
+//    private func updateTime(_ date: Date) {
+//        session.currentTime = date
+//    }
 }
 
 struct ControlButton: View {

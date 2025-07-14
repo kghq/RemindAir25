@@ -14,6 +14,7 @@ import Foundation
     // Foundational properties
     var appearTime = Date.now
     let preparationDuration: TimeInterval
+    var currentTime = Date.now
     var totalDuration: TimeInterval
     
     // Phase: Breath digested into an exercise
@@ -45,6 +46,9 @@ import Foundation
     // Pause/resume controls
     var hasStarted = false
     var isRunning = false
+    var isFinished: Bool {
+        totalDuration + effectivePauseDuration + preparationDuration <= Date.now.timeIntervalSince(appearTime)
+    }
     var resumeTime = Date.now
     var pauseTime = Date.now
     var currentPause: TimeInterval {
