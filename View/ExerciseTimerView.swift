@@ -13,6 +13,8 @@ struct ExerciseTimerView: View {
     @Bindable var session: ExerciseSessionModel
     @Binding var path: NavigationPath
     
+    @State private var animatedPhaseID: UUID?
+    
     var body: some View {
         
         TimelineView(.periodic(from: .now, by: 1.0)) { context in
@@ -35,15 +37,20 @@ struct ExerciseTimerView: View {
             let currentPhaseIndex = shiftedPhases.firstIndex(where: { $0.start <= now && now < $0.end })
             let displayPhases = Array(shiftedPhases.dropFirst(currentPhaseIndex ?? 0).prefix(session.oneBreathPattern))
             VStack {
-                Text("Inhale")
+                Text(shiftedPhases[currentPhaseIndex ?? 0].label)
                     .font(.largeTitle.smallCaps())
+                    .animation(.easeInOut(duration: 0.1), value: currentPhaseIndex)
                 ForEach(Array(displayPhases.enumerated()), id: \.element.id) { index, phase in
                     Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
                         .font(index == 0 ? .system(size: 70) : .title3)
                         .foregroundStyle(index == 0 ? .primary : .secondary)
                         .monospacedDigit()
+                        // .contentTransition(.numericText(value: ))
+                        .transition(.opacity)
+                        .id(phase.id) // Track identity for proper animation
                 }
             }
+            .animation(.easeIn(duration: 0.3), value: currentPhaseIndex)
             .background(
                 ZStack {
                     Circle()

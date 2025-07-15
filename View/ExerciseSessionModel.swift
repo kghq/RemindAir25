@@ -20,6 +20,15 @@ struct Phase: Identifiable {
     
     var start: Date
     var end: Date
+    
+    var label: String {
+        switch type {
+        case .inhale: return "Inhale"
+        case .exhale: return "Exhale"
+        case .holdFull: return "Hold"
+        case .holdEmpty: return "Hold"
+        }
+    }
 }
 
 @Observable class ExerciseSessionModel {

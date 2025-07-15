@@ -44,7 +44,7 @@ struct AddView: View {
             }
             .navigationTitle("Add New Exercise")
             .navigationBarTitleDisplayMode(.inline)
-            .scrollDismissesKeyboard(.immediately)
+            //.scrollDismissesKeyboard(.immediately)
             // Zeroing the breath hold, when user toggled off
             .onChange(of: model.holdingBreath) {
                 if model.holdingBreath == false {

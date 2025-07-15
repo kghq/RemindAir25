@@ -55,6 +55,7 @@ struct ExerciseFormSection: View {
                     Spacer()
                     TextField("Exhale", value: $exhale, formatter: NumberFormatter())
                         .bold()
+                        .scrollDismissesKeyboard(.immediately)
                 }
                 Toggle("Breath Hold", isOn: $holdingBreath.animation())
                 if holdingBreath {

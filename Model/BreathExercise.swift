@@ -42,7 +42,7 @@ struct BreathExercise: Exercise, Codable, Hashable, Identifiable {
     }
     
     // Exercise Duration
-    var prepTime: TimeInterval = 2
+    var prepTime: TimeInterval = 0
     var breathCount: Int = 10
     var totalDuration: TimeInterval {
         breathDuration * TimeInterval(breathCount)
