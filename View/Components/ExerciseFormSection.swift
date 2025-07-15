@@ -38,7 +38,7 @@ struct ExerciseFormSection: View {
                 TextField("Name", text: $name)
                     .textInputAutocapitalization(.words)
                     .submitLabel(.return)
-                TextField("Description", text: $description)
+                TextField("Description (Optional)", text: $description, axis: .vertical)
                     .submitLabel(.done)
             }
             

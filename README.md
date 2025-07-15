@@ -1,12 +1,6 @@
 #  README
 
-## Breathing App
-WE'll see how far can I go.
-
-
 ## TODO
-Include breath count: how many left, how many to go.
-Hide all but 3 upcoming timers
 Breath phases labels
 Done
 When this is done, smooth the transitions and add some ending.
@@ -20,7 +14,6 @@ The Timer shows:
 Preparation time (then disappears)
 Total time
 Cycles left
-Name of exercise, maybe?
 Collumn of timers (maybe disappear one by one as the last cycle closes, so in the end no timer is shown?)
 Label for the current and next breath phase (and Prepare, and End, like Starting in... and Done)
 Summary in the future.
@@ -88,3 +81,6 @@ And i want to show the prep time as optional
 5. Rename AddView to ExerciseAddView etc
 .listrowbackground
 Dividers between list rows
+
+## Breathing App
+WE'll see how far can I go.
