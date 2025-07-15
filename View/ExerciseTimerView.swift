@@ -17,8 +17,6 @@ struct ExerciseTimerView: View {
         
         TimelineView(.periodic(from: .now, by: 1.0)) { context in
             
-            Spacer()
-            
             // let _ = updateTime(context.date)
             let now = context.date
             let shift = session.shift(at: now)
@@ -27,30 +25,44 @@ struct ExerciseTimerView: View {
             // Preparation timer
             let prepRange = session.shiftedPrepRange(at: now)
             Text(displayDate, format: .timer(countingDownIn: prepRange))
-                .font(.title2)
                 .monospacedDigit()
-                .foregroundStyle(.blue)
+                .padding()
+            
+            Spacer()
             
             // Phase Timers
             let shiftedPhases = session.shiftedPhases(by: shift)
             let currentPhaseIndex = shiftedPhases.firstIndex(where: { $0.start <= now && now < $0.end })
             let displayPhases = Array(shiftedPhases.dropFirst(currentPhaseIndex ?? 0).prefix(session.oneBreathPattern))
-            ForEach(displayPhases) { phase in
-                Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
-                    .monospacedDigit()
+            VStack {
+                Text("Inhale")
+                    .font(.largeTitle.smallCaps())
+                ForEach(Array(displayPhases.enumerated()), id: \.element.id) { index, phase in
+                    Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
+                        .font(index == 0 ? .system(size: 70) : .title3)
+                        .foregroundStyle(index == 0 ? .primary : .secondary)
+                        .monospacedDigit()
+                }
             }
-
+            .background(
+                ZStack {
+                    Circle()
+                        .foregroundStyle(.orange)
+                        .frame(width: 320, height: 320)
+                    Circle()
+                        .foregroundStyle(.background)
+                        .frame(width: 300, height: 300)
+                }
+            )
+            
+            Spacer()
+            
             // Total Duration Timer
             let baseStart = session.appearTime.addingTimeInterval(session.preparationDuration)
             let totalStart = baseStart.addingTimeInterval(shift)
             let totalEnd = totalStart.addingTimeInterval(session.totalDuration)
             Text(displayDate, format: .timer(countingDownIn: totalStart..<totalEnd))
-                .font(.largeTitle)
-                .bold()
                 .monospacedDigit()
-                .foregroundStyle(.red)
-            
-            Spacer()
             
             // Buttons
             VStack {
@@ -114,3 +126,33 @@ struct ControlButton: View {
         .environment(model)
 }
 
+struct PhaseTimerView: View {
+    let phase: Phase
+    let isCurrent: Bool
+    let now: Date
+
+    var body: some View {
+        VStack {
+            Text(label(for: phase.type))
+                .font(isCurrent ? .largeTitle.smallCaps() : .caption)
+                .foregroundStyle(isCurrent ? .primary : .secondary)
+            Text(now, format: .timer(countingDownIn: phase.start..<phase.end))
+                .font(isCurrent ? .system(size: 70) : .title2)
+                .monospacedDigit()
+                .foregroundStyle(isCurrent ? .primary : .secondary)
+        }
+        .blur(radius: isCurrent ? 0 : 0.5)
+        .opacity(isCurrent ? 1 : 0.6)
+        .scaleEffect(isCurrent ? 1.0 : 0.9)
+        .animation(.easeInOut(duration: 0.3), value: isCurrent)
+    }
+
+    func label(for type: BreathType) -> String {
+        switch type {
+        case .inhale: return "Inhale"
+        case .exhale: return "Exhale"
+        case .holdFull: return "Hold (In)"
+        case .holdEmpty: return "Hold (Out)"
+        }
+    }
+}

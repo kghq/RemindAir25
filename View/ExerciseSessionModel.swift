@@ -9,6 +9,19 @@
 
 import Foundation
 
+// Phase: Breath digested into an exercise
+enum BreathType {
+    case inhale, holdFull, exhale, holdEmpty
+}
+
+struct Phase: Identifiable {
+    var id = UUID()
+    var type: BreathType
+    
+    var start: Date
+    var end: Date
+}
+
 @Observable class ExerciseSessionModel {
     
     // Foundational properties
@@ -18,20 +31,11 @@ import Foundation
     var totalDuration: TimeInterval
     var oneBreathPattern = 4
     
-    // Phase: Breath digested into an exercise
-    enum BreathType {
-        case inhale, holdFull, exhale, holdEmpty
-    }
-    
-    struct Phase: Identifiable {
-        var id = UUID()
-        var type: BreathType
-        
-        var start: Date
-        var end: Date
-    }
-    
     var staticPhases: [Phase]
+    
+    var currentPhaseIndex: Int? { // For animations
+        staticPhases.firstIndex(where: { $0.start <= Date.now && Date.now < $0.end })
+    }
     
     // Preparation logic
     func prepDone(at date: Date) -> Bool {
