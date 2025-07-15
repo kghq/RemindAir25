@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TestTimerView: View {
+struct ExerciseTimerView: View {
     
     @Environment(Exercises.self) var exercises
     @Bindable var session: ExerciseSessionModel
@@ -52,15 +52,16 @@ struct TestTimerView: View {
             
             // Buttons
             VStack {
-                if !session.hasStarted {
+                if !session.hasStarted || session.isFinished {
                     ControlButton(label: "Start", action: session.start)
                         .tint(.blue)
+                        .disabled(session.isFinished)
                 }
-                if session.isFinished {
-                    ControlButton(label: "Start Again", action: session.reset)
-                        .tint(.blue)
-                }
-                if session.isRunning {
+//                if session.isFinished {
+//                    ControlButton(label: "Start Again", action: session.reset)
+//                        .tint(.blue)
+//                }
+                if session.isRunning && !session.isFinished {
                     ControlButton(label: "Pause", action: session.pause)
                         .tint(.blue)
                 }
@@ -69,8 +70,12 @@ struct TestTimerView: View {
                         .tint(.blue)
                 }
                 HStack {
-                    ControlButton(label: "Reset", action: session.reset)
-                        .disabled(session.isRunning || !session.hasStarted)
+                    if !session.isFinished {
+                        ControlButton(label: "Reset", action: session.reset)
+                            .disabled(session.isRunning || !session.hasStarted)
+                    } else {
+                        ControlButton(label: "Reset", action: session.reset)
+                    }
                     ControlButton(label: "Done", action: session.done)
                         .tint(.red)
                 }
@@ -103,7 +108,7 @@ struct ControlButton: View {
     let model = Exercises.preview
     let exercise = model.items[0]
 
-    return TestTimerView(session: ExerciseSessionModel(from: exercise), path: .constant(NavigationPath()))
+    return ExerciseTimerView(session: ExerciseSessionModel(from: exercise), path: .constant(NavigationPath()))
         .environment(model)
 }
 
