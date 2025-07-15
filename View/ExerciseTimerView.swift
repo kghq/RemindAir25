@@ -33,7 +33,9 @@ struct ExerciseTimerView: View {
             
             // Phase Timers
             let shiftedPhases = session.shiftedPhases(by: shift)
-            ForEach(shiftedPhases) { phase in
+            let currentPhaseIndex = shiftedPhases.firstIndex(where: { $0.start <= now && now < $0.end })
+            let displayPhases = Array(shiftedPhases.dropFirst(currentPhaseIndex ?? 0).prefix(session.oneBreathPattern))
+            ForEach(displayPhases) { phase in
                 Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
                     .monospacedDigit()
             }

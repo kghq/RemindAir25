@@ -33,9 +33,9 @@ struct BreathExercise: Exercise, Codable, Hashable, Identifiable {
     var description = ""
     
     // Breath Pattern
-    var inhale: TimeInterval = 3
-    var exhale: TimeInterval = 2
-    var holdFull: TimeInterval = 0
+    var inhale: TimeInterval = 4
+    var exhale: TimeInterval = 3
+    var holdFull: TimeInterval = 2
     var holdEmpty: TimeInterval = 1
     var breathDuration: TimeInterval {
         exhale + inhale + holdFull + holdEmpty
@@ -62,7 +62,7 @@ extension Exercises {
             BreathExercise(
                 name: "Preview Exercise",
                 description: "Preview Description",
-                breathCount: 1
+                breathCount: 5
             )
         ]
         return model

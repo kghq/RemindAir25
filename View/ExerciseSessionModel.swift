@@ -16,6 +16,7 @@ import Foundation
     let preparationDuration: TimeInterval
     var currentTime = Date.now
     var totalDuration: TimeInterval
+    var oneBreathPattern = 4
     
     // Phase: Breath digested into an exercise
     enum BreathType {
@@ -171,6 +172,12 @@ import Foundation
                 ))
                 phaseStart += exercise.holdEmpty
             }
+        }
+        
+        if exercise.holdFull == 0 && exercise.holdEmpty == 0 {
+            oneBreathPattern = 2
+        } else if exercise.holdFull == 0 || exercise.holdEmpty == 0 {
+            oneBreathPattern = 3
         }
 
         self.totalDuration = phaseStart.timeIntervalSince(realStartTime)

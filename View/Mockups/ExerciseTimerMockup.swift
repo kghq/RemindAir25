@@ -10,7 +10,7 @@ import SwiftUI
 struct ExerciseTimerMockup: View {
     var body: some View {
         
-        Text("3 breaths to go")
+        Text("4:32 left. 3 breaths to go")
         
         Spacer()
         VStack {
@@ -44,7 +44,7 @@ struct ExerciseTimerMockup: View {
         // make it with overlay or clipshape?
         
         Spacer()
-        Text("5 breaths done")
+        Text("1:25 elapsed. 5 breaths done")
         // Buttons
         VStack {
                 ControlButtonMockup(label: "Start")
