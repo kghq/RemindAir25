@@ -39,39 +39,88 @@ struct ExerciseFormSection: View {
                     .textInputAutocapitalization(.words)
                     .submitLabel(.return)
                 TextField("Description (Optional)", text: $description, axis: .vertical)
-                    .submitLabel(.done)
             }
             
             // Breath Pattern
             Section("Breath Pattern") {
                 HStack {
-                    Text("Inhale")
                     Spacer()
-                    TextField("Inhale", value: $inhale, formatter: NumberFormatter())
-                        .bold()
-                }
-                HStack {
-                    Text("Exhale")
+                    VStack {
+                        Text("Inhale")
+                            .font(.headline.smallCaps())
+                        Picker("Inhale", selection: $inhale) {
+                            ForEach(1..<241, id: \.self) { selection in
+                                let formatted = formatTime(selection)
+                                Text(formatted)
+                                    .tag(TimeInterval(selection))
+                                    .font(.headline)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 80, height: 100)
+                    }
+                    
+                    VStack {
+                        Text("Hold")
+                            .font(.headline.smallCaps())
+                        Picker("Hold Full", selection: $holdFull) {
+                            ForEach(0..<241, id: \.self) { selection in
+                                let formatted = formatTime(selection)
+                                Text(formatted)
+                                    .tag(TimeInterval(selection))
+                                    .font(.headline)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 80, height: 100)
+                    }
+                    
+                    VStack {
+                        Text("Exhale")
+                            .font(.headline.smallCaps())
+                        Picker("Exhale", selection: $exhale) {
+                            ForEach(1..<241, id: \.self) { selection in
+                                let formatted = formatTime(selection)
+                                Text(formatted)
+                                    .tag(TimeInterval(selection))
+                                    .font(.headline)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 80, height: 100)
+                    }
+                    
+                    VStack {
+                        Text("Hold")
+                            .font(.headline.smallCaps())
+                        Picker("Hold Empty", selection: $holdEmpty) {
+                            ForEach(0..<241, id: \.self) { selection in
+                                let formatted = formatTime(selection)
+                                Text(formatted)
+                                    .tag(TimeInterval(selection))
+                                    .font(.headline)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 80, height: 100)
+                    }
                     Spacer()
-                    TextField("Exhale", value: $exhale, formatter: NumberFormatter())
-                        .bold()
-                        .scrollDismissesKeyboard(.immediately)
                 }
-                Toggle("Breath Hold", isOn: $holdingBreath.animation())
-                if holdingBreath {
-                    HStack {
-                        Text("Full")
-                        Spacer()
-                        TextField("Hold Full", value: $holdFull, formatter: NumberFormatter())
-                            .bold()
-                    }
-                    HStack {
-                        Text("Empty")
-                        Spacer()
-                        TextField("Hold Empty", value: $holdEmpty, formatter: NumberFormatter())
-                            .bold()
-                    }
-                }
+//                Toggle("Breath Hold", isOn: $holdingBreath.animation())
+//                if holdingBreath {
+//                    HStack {
+//                        Text("Full")
+//                        Spacer()
+//                        TextField("Hold Full", value: $holdFull, formatter: NumberFormatter())
+//                            .bold()
+//                    }
+//                    HStack {
+//                        Text("Empty")
+//                        Spacer()
+//                        TextField("Hold Empty", value: $holdEmpty, formatter: NumberFormatter())
+//                            .bold()
+//                    }
+//                }
                 HStack {
                     Image(systemName: "wind")
                     Text("Breath Duration")
@@ -79,16 +128,23 @@ struct ExerciseFormSection: View {
                     Text(breathDuration.formatAsWords())
                 }
             }
-            .keyboardType(.decimalPad)
-            .multilineTextAlignment(.trailing)
+//            .keyboardType(.decimalPad)
+//            .multilineTextAlignment(.trailing)
             
             // Number of cycles and duration, and prep
-            Section("Session pattern") {
+            Section("Breath Count") {
                 HStack {
-                    Text("Breath Count")
                     Spacer()
-                    TextField("Number of Breaths", value: $cycles, formatter: NumberFormatter())
-                        .bold()
+                    Picker("Number of Breaths", selection: $cycles) {
+                        ForEach(0..<241, id: \.self) { selection in
+                            Text(selection.formatAsWords())
+                                .tag(TimeInterval(selection))
+                                .font(.headline)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(width: 80, height: 100)
+                    Spacer()
                 }
                 HStack {
                     Text("Preparation Time")
@@ -98,7 +154,6 @@ struct ExerciseFormSection: View {
                 }
             }
             .keyboardType(.decimalPad)
-            .multilineTextAlignment(.trailing)
             
             Section("Summary") {
                 HStack {
@@ -128,3 +183,21 @@ struct ExerciseFormSection: View {
         )
     }
 }
+
+func formatTime(_ seconds: Int) -> String {
+    
+    if seconds < 60 {
+        return seconds.formatAsWords()
+    }
+    
+    let formatter = DateComponentsFormatter()
+    formatter.allowedUnits = [.minute, .second]
+    formatter.zeroFormattingBehavior = [.dropLeading]
+    return formatter.string(from: TimeInterval(seconds)) ?? "0:00"
+}
+
+
+//.background(.red)
+//                    TextField("Exhale", value: $exhale, formatter: NumberFormatter())
+//                        .bold()
+//                        .scrollDismissesKeyboard(.immediately)

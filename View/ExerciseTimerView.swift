@@ -13,13 +13,10 @@ struct ExerciseTimerView: View {
     @Bindable var session: ExerciseSessionModel
     @Binding var path: NavigationPath
     
-    @State private var animatedPhaseID: UUID?
-    
     var body: some View {
         
         TimelineView(.periodic(from: .now, by: 1.0)) { context in
-            
-            // let _ = updateTime(context.date)
+        
             let now = context.date
             let shift = session.shift(at: now)
             let displayDate = now
@@ -41,16 +38,15 @@ struct ExerciseTimerView: View {
                     .font(.largeTitle.smallCaps())
                     .animation(.easeInOut(duration: 0.1), value: currentPhaseIndex)
                 ForEach(Array(displayPhases.enumerated()), id: \.element.id) { index, phase in
+                    // let secondsRemaining = Double(phase.end.timeIntervalSince(now))
                     Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
                         .font(index == 0 ? .system(size: 70) : .title3)
                         .foregroundStyle(index == 0 ? .primary : .secondary)
                         .monospacedDigit()
-                        // .contentTransition(.numericText(value: ))
                         .transition(.opacity)
                         .id(phase.id) // Track identity for proper animation
                 }
             }
-            .animation(.easeIn(duration: 0.3), value: currentPhaseIndex)
             .background(
                 ZStack {
                     Circle()
@@ -105,6 +101,12 @@ struct ExerciseTimerView: View {
             
         }
     }
+    
+    func formattedTime(seconds: Int) -> String {
+        let minutes = seconds / 60
+        let secs = seconds % 60
+        return String(format: "%d:%02d", minutes, secs)
+    }
 }
 
 struct ControlButton: View {
@@ -120,6 +122,7 @@ struct ControlButton: View {
                 .font(.title3)
                 .bold()
                 .frame(maxWidth: .infinity)
+                .padding(5)
         }
         .buttonStyle(.bordered)
     }
@@ -131,35 +134,4 @@ struct ControlButton: View {
 
     return ExerciseTimerView(session: ExerciseSessionModel(from: exercise), path: .constant(NavigationPath()))
         .environment(model)
-}
-
-struct PhaseTimerView: View {
-    let phase: Phase
-    let isCurrent: Bool
-    let now: Date
-
-    var body: some View {
-        VStack {
-            Text(label(for: phase.type))
-                .font(isCurrent ? .largeTitle.smallCaps() : .caption)
-                .foregroundStyle(isCurrent ? .primary : .secondary)
-            Text(now, format: .timer(countingDownIn: phase.start..<phase.end))
-                .font(isCurrent ? .system(size: 70) : .title2)
-                .monospacedDigit()
-                .foregroundStyle(isCurrent ? .primary : .secondary)
-        }
-        .blur(radius: isCurrent ? 0 : 0.5)
-        .opacity(isCurrent ? 1 : 0.6)
-        .scaleEffect(isCurrent ? 1.0 : 0.9)
-        .animation(.easeInOut(duration: 0.3), value: isCurrent)
-    }
-
-    func label(for type: BreathType) -> String {
-        switch type {
-        case .inhale: return "Inhale"
-        case .exhale: return "Exhale"
-        case .holdFull: return "Hold (In)"
-        case .holdEmpty: return "Hold (Out)"
-        }
-    }
 }
