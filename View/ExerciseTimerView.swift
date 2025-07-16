@@ -37,16 +37,17 @@ struct ExerciseTimerView: View {
                 Text(shiftedPhases[currentPhaseIndex ?? 0].label)
                     .font(.largeTitle.smallCaps())
                     .animation(.easeInOut(duration: 0.1), value: currentPhaseIndex)
-                ForEach(Array(displayPhases.enumerated()), id: \.element.id) { index, phase in
-                    // let secondsRemaining = Double(phase.end.timeIntervalSince(now))
-                    Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
-                        .font(index == 0 ? .system(size: 70) : .title3)
-                        .foregroundStyle(index == 0 ? .primary : .secondary)
-                        .monospacedDigit()
-                        .transition(.opacity)
-                        .id(phase.id) // Track identity for proper animation
+                ZStack {
+                    ForEach(Array(displayPhases.enumerated()), id: \.element.id) { index, phase in
+                        Text(displayDate, format: .timer(countingDownIn: phase.start..<phase.end))
+                            .offset(y: index == 0 ? 0 : 30 * CGFloat(index) + 20)
+                            .font(index == 0 ? .system(size: 70) : .title3)
+                            .foregroundStyle(index == 0 ? .primary : .secondary)
+                            .monospacedDigit()
+                    }
                 }
             }
+            .offset(y: -19)
             .background(
                 ZStack {
                     Circle()
