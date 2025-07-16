@@ -69,7 +69,7 @@ struct ContentView: View {
                     
                 // ContentUnavailableView
                 } else {
-                    ContentUnavailableView("No Exercises", systemImage: "wind", description: Text("Tap \"+\" to create an Exercise"))
+                    ContentUnavailableView("No Exercises", systemImage: "wind", description: Text("Tap the + button to create an exercise."))
                 }
             }
             
