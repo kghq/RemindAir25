@@ -27,7 +27,7 @@ struct AddView: View {
                     exhale: $model.exhale,
                     holdFull: $model.holdFull,
                     holdEmpty: $model.holdEmpty,
-                    cycles: $model.cycles,
+                    breathCount: $model.breathCount,
                     prepTime: $model.prepTime,
                     holdingBreath: $model.holdingBreath
                 )

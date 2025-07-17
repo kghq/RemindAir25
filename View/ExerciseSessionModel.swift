@@ -39,6 +39,9 @@ struct Phase: Identifiable {
     var currentTime = Date.now
     var totalDuration: TimeInterval
     var oneBreathPattern = 4
+    var breathsLeft: Int {
+        staticPhases.count / oneBreathPattern
+    }
     
     var staticPhases: [Phase]
     

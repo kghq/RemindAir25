@@ -16,7 +16,7 @@ import Foundation
     var holdFull = TimeInterval(0)
     var holdEmpty = TimeInterval(0)
     
-    var cycles = 1.0
+    var breathCount = 1.0
     var prepTime = TimeInterval(0)
     var holdingBreath = false
     
@@ -29,7 +29,7 @@ import Foundation
         exhale = exercise.exhale
         holdFull = exercise.holdFull
         holdEmpty = exercise.holdEmpty
-        cycles = Double(exercise.breathCount)
+        breathCount = Double(exercise.breathCount)
         prepTime = exercise.prepTime
         holdingBreath = (holdFull > 0 || holdEmpty > 0)
     }
@@ -43,7 +43,7 @@ import Foundation
             holdFull: holdFull,
             holdEmpty: holdEmpty,
             prepTime: prepTime,
-            breathCount: Int(cycles)
+            breathCount: Int(breathCount)
         )
     }
     
@@ -54,7 +54,7 @@ import Foundation
         exercise.exhale = exhale
         exercise.holdFull = holdFull
         exercise.holdEmpty = holdEmpty
-        exercise.breathCount = Int(cycles)
+        exercise.breathCount = Int(breathCount)
         exercise.prepTime = prepTime
     }
     
@@ -62,7 +62,7 @@ import Foundation
         guard !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return false }
         guard inhale > 0 || exhale > 0 else { return false }
         guard inhale < 601 && exhale < 601 && holdFull < 601 && holdEmpty < 601 else { return false }
-        guard cycles > 0 else { return false }
+        guard breathCount > 0 else { return false }
         
         return true
     }

@@ -67,6 +67,7 @@ struct ExerciseTimerView: View {
             let totalEnd = totalStart.addingTimeInterval(session.totalDuration)
             Text(displayDate, format: .timer(countingDownIn: totalStart..<totalEnd))
                 .monospacedDigit()
+            Text("\(session.breathCount)")
             
             // Buttons
             VStack {

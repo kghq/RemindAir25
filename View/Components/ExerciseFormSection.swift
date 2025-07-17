@@ -17,7 +17,7 @@ struct ExerciseFormSection: View {
     @Binding var holdFull: TimeInterval
     @Binding var holdEmpty: TimeInterval
 
-    @Binding var cycles: Double
+    @Binding var breathCount: Double
     @Binding var prepTime: TimeInterval
     @Binding var holdingBreath: Bool
 
@@ -26,7 +26,7 @@ struct ExerciseFormSection: View {
     }
 
     var totalDuration: TimeInterval {
-        breathDuration * cycles
+        breathDuration * breathCount
     }
     
     var body: some View {
@@ -135,7 +135,7 @@ struct ExerciseFormSection: View {
             Section("Breath Count") {
                 HStack {
                     Spacer()
-                    Picker("Number of Breaths", selection: $cycles) {
+                    Picker("Number of Breaths", selection: $breathCount) {
                         ForEach(0..<241, id: \.self) { selection in
                             Text(selection.formatAsWords())
                                 .tag(TimeInterval(selection))
@@ -177,7 +177,7 @@ struct ExerciseFormSection: View {
             exhale: .constant(6),
             holdFull: .constant(0),
             holdEmpty: .constant(0),
-            cycles: .constant(5),
+            breathCount: .constant(5),
             prepTime: .constant(10),
             holdingBreath: .constant(true)
         )
